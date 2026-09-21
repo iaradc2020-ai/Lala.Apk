@@ -5,7 +5,7 @@
 📲 Baixe o aplicativo
 
 <p align="center">
-  <a href="https://github.com/iaradc2020-ai/Lala.Apk/releases/download/V1.0/Lala.Apk">
+  <a href="https://github.com/iaradc2020-ai/Lala.Apk/releases/download/V1.0/base.apk">
     <img src="https://img.shields.io/badge/📲%20BAIXAR%20APK-V1.0-ff69b4?style=for-the-badge" alt="Baixar APK">
   </a>
 </p>💖 Sobre o app
