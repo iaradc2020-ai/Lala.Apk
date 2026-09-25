@@ -1044,6 +1044,16 @@ body.dark .finance-history-item small,body.classic .finance-history-item small{c
 .postit.expanded .postit-delete{opacity:1;pointer-events:auto;}
 
 
+
+/* ===== GERENCIADOR DE ABAS NAS CONFIGURAÇÕES ===== */
+.tabs-manager{display:flex;flex-direction:column;gap:7px}.tabs-manager[hidden]{display:none!important}
+.tab-manager-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.58);border:1px solid rgba(150,120,140,.16)}
+.tab-manager-name{font-size:calc(10px * var(--escala-fonte));font-weight:700;color:var(--texto);display:flex;align-items:center;gap:7px}
+.tab-manager-remove{border:0;border-radius:9px;padding:6px 9px;background:#ffe8ee;color:#9b3855;font-weight:800;font-size:calc(9px * var(--escala-fonte));cursor:pointer}
+.tab-manager-protected{font-size:calc(8px * var(--escala-fonte));opacity:.58;font-weight:700}
+body.dark .tab-manager-row,body.classic .tab-manager-row{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12)}
+body.dark .tab-manager-name,body.classic .tab-manager-name{color:#fff}
+
 /* ===== RESPONSIVO ===== */
 
 @media(max-width:380px){
@@ -1601,43 +1611,48 @@ body.recriado .status-theme{background:linear-gradient(90deg,#6c63ff,#67c8b5)}
         <span id="badgeNotificacoes" class="logo-notify"></span>
     </button>
 
-    <button class="menu-btn active" onclick="abrir('inicio',this)">
+    <button class="menu-btn active" data-tab-key="inicio" onclick="abrir('inicio',this)">
         <span>🏠</span>
         <small>Início</small>
     </button>
 
-    <button class="menu-btn" onclick="abrir('rotina',this)">
+    <button class="menu-btn" data-tab-key="rotina" onclick="abrir('rotina',this)">
         <span>📋</span>
         <small>Rotina</small>
     </button>
 
-    <button class="menu-btn" onclick="abrir('calendario',this)">
+    <button class="menu-btn" data-tab-key="calendario" onclick="abrir('calendario',this)">
         <span>🗓️</span>
         <small>Agenda</small>
     </button>
 
-    <button class="menu-btn" onclick="abrir('notas',this)">
+    <button class="menu-btn" data-tab-key="notas" onclick="abrir('notas',this)">
         <span>📝</span>
         <small>Notas</small>
     </button>
 
-    <button class="menu-btn" onclick="abrir('estudos',this)">
+    <button class="menu-btn" data-tab-key="estudos" onclick="abrir('estudos',this)">
         <span>📚</span>
         <small>Estudo</small>
     </button>
 
-    <button class="menu-btn" onclick="abrir('financas',this)">
+    <button class="menu-btn" data-tab-key="financas" onclick="abrir('financas',this)">
         <span>💰</span>
         <small>Finanças</small>
     </button>
 
-    <button class="menu-btn" onclick="abrir('cardapio',this)">
+    <button class="menu-btn" data-tab-key="cardapio" onclick="abrir('cardapio',this)">
         <span>🍓</span>
         <small>Cardápio</small>
     </button>
 
+    <button class="menu-btn" data-tab-key="baixarvideos" onclick="abrir('baixarvideos',this)">
+        <span>🎬</span>
+        <small>Vídeos</small>
+    </button>
+
     <div class="menu-bottom">
-        <button class="menu-btn" onclick="abrir('config',this)">
+        <button class="menu-btn" data-tab-key="config" onclick="abrir('config',this)">
             <span>⚙️</span>
             <small>Ajustes</small>
         </button>
@@ -1958,6 +1973,339 @@ Sua reserva fica guardadinha aqui. 💛
 </section>
 
 
+<style id="estilo-baixador-facebook">
+/* ===== ABA FB — ETAPA 2 ===== */
+.facebook-downloader-card{background:linear-gradient(135deg,#eef6ff,#fff7fb);border:1px solid #d9e5f3;border-radius:22px;padding:16px;box-shadow:0 7px 20px var(--sombra);margin-bottom:12px}
+.facebook-downloader-title{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.facebook-downloader-title .icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#1877f2;color:#fff;font-size:15px;font-weight:900;letter-spacing:-.5px;box-shadow:0 5px 12px rgba(24,119,242,.22)}
+.facebook-downloader-title strong{font-family:'Fredoka',sans-serif;color:#26384d;font-size:calc(17px * var(--escala-fonte))}
+.facebook-downloader-card p{margin:7px 0 12px;color:#536273;font-size:calc(11px * var(--escala-fonte));line-height:1.5;font-weight:600}
+.videos-tool-card{background:transparent}
+.videos-tool-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.videos-tool-icon{width:46px;height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:#1877f2;color:#fff;font-size:16px;font-weight:900;box-shadow:0 6px 14px rgba(24,119,242,.2)}
+.videos-tool-title{font-weight:800;color:#243247;font-size:calc(17px * var(--escala-fonte))}
+.videos-tool-sub{margin-top:2px;color:#718096;font-size:calc(10px * var(--escala-fonte));font-weight:600}
+.videos-url-row{display:flex;gap:8px;align-items:stretch}
+.videos-url-input{flex:1;min-width:0;height:48px!important;margin:0!important;padding:0 14px!important;border-radius:15px!important;border:1px solid #d7e0ec!important;background:#fff!important;color:#172033!important;box-shadow:0 5px 15px rgba(60,80,110,.07)}
+.videos-url-input:focus{outline:none!important;border-color:#1877f2!important;box-shadow:0 0 0 3px rgba(24,119,242,.12)!important}
+.videos-search-btn{width:50px;border:0;border-radius:15px;background:#1877f2;color:#fff;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 6px 14px rgba(24,119,242,.2)}
+.videos-search-btn:disabled{opacity:.65;cursor:wait}
+.videos-status{display:none;margin-top:9px;padding:9px 11px;border-radius:12px;color:#4b5563;font-size:calc(10px * var(--escala-fonte));font-weight:700}
+.videos-howto{margin-top:13px;padding:12px;border-radius:18px;background:rgba(255,255,255,.82);border:1px solid #e1e8f1}
+.videos-howto-title{font-weight:800;color:#26384d;font-size:calc(12px * var(--escala-fonte));margin-bottom:9px;text-align:center}
+.videos-howto-video{position:relative;height:118px;border-radius:15px;overflow:hidden;background:linear-gradient(135deg,#dcecff,#f1e5ff);box-shadow:inset 0 0 0 1px rgba(255,255,255,.55)}
+.videos-howto-video:before{content:'VÍDEO DO FACEBOOK';position:absolute;left:12px;top:10px;padding:4px 7px;border-radius:7px;background:rgba(0,0,0,.28);color:#fff;font-size:8px;font-weight:800;letter-spacing:.4px}
+.videos-howto-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:43px;height:43px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.94);color:#1877f2;font-size:19px;padding-left:2px;box-shadow:0 5px 14px rgba(30,50,80,.2)}
+.videos-howto-dots{position:absolute;right:10px;bottom:9px;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.58);color:#fff;font-size:20px;font-weight:900;line-height:1}
+.videos-howto-caption{margin-top:9px;text-align:center;color:#536273;font-size:calc(9.5px * var(--escala-fonte));line-height:1.4;font-weight:600}
+.videos-result{display:none;margin-top:13px}
+.videos-result-box{padding:0;border-radius:18px;background:transparent}
+.videos-download{display:flex;align-items:center;justify-content:center;width:100%;box-sizing:border-box;margin-top:11px;padding:12px;border-radius:14px;background:#1877f2;color:#fff!important;text-decoration:none;font-weight:800;font-size:calc(12px * var(--escala-fonte));box-shadow:0 7px 15px rgba(24,119,242,.2)}
+.videos-note{margin-top:11px;padding:9px 10px;border-radius:12px;background:rgba(255,255,255,.65);color:#718096;font-size:calc(9px * var(--escala-fonte));line-height:1.45;font-weight:600}
+body.dark .facebook-downloader-card,body.classic .facebook-downloader-card{background:#1e293b;border-color:#334155}
+body.dark .facebook-downloader-title strong,body.classic .facebook-downloader-title strong,body.dark .facebook-downloader-card p,body.classic .facebook-downloader-card p{color:#fff!important}
+body.dark .videos-tool-title,body.classic .videos-tool-title,body.dark .videos-howto-title,body.classic .videos-howto-title{color:#fff!important}
+body.dark .videos-tool-sub,body.classic .videos-tool-sub,body.dark .videos-howto-caption,body.classic .videos-howto-caption,body.dark .videos-note,body.classic .videos-note{color:#dbe4f5!important}
+body.dark .videos-url-input,body.classic .videos-url-input{background:#fff!important;color:#111!important}
+body.dark .videos-howto,body.classic .videos-howto{background:#243247;border-color:#3a4b63}
+body.dark .videos-howto-video,body.classic .videos-howto-video{background:#1d3552}
+@media(max-width:560px){.videos-url-row{gap:6px}.videos-search-btn{width:48px}.videos-howto-video{height:105px}}
+
+.videos-preview-card{margin-top:2px;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 5px 16px rgba(30,50,80,.12);border:1px solid #e1e8f1}
+.videos-preview{display:block;width:100%;max-height:260px;object-fit:cover;background:#e8eef7}
+.videos-preview-placeholder{height:180px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#dcecff,#f1e5ff);color:#1877f2;font-size:34px}
+.videos-result-title{padding:10px 12px;font-weight:800;color:#26384d;font-size:calc(11px * var(--escala-fonte));text-align:center}
+.videos-download:disabled{opacity:.65;cursor:wait}
+body.dark .videos-preview-card,body.classic .videos-preview-card{background:#1e293b;border-color:#334155}
+body.dark .videos-result-title,body.classic .videos-result-title{color:#fff!important}
+</style>
+
+<!-- ================= BAIXAR VÍDEOS ================= -->
+<section id="baixarvideos" class="page">
+
+    <div class="top">
+        <div>
+            <div class="date" id="dataVideos"></div>
+            <h1>Baixar vídeos 🎬</h1>
+            <div class="subtitle">Facebook • dentro do seu Diário</div>
+        </div>
+        <div style="font-size:28px" class="flower-icon">🍓</div>
+    </div>
+
+    <div class="videos-tool-card">
+        <div class="videos-tool-head">
+            <div class="videos-tool-icon" aria-label="Facebook">FB</div>
+            <div>
+                <div class="videos-tool-title">Baixador de vídeos</div>
+                <div class="videos-tool-sub">Cole o link e receba as opções aqui mesmo.</div>
+            </div>
+        </div>
+
+        <div class="videos-url-row">
+            <input id="videosFacebookUrl"
+                   class="videos-url-input"
+                   type="url"
+                   inputmode="url"
+                   autocomplete="off"
+                   placeholder="Cole o link do Facebook..."
+                   aria-label="Link do vídeo do Facebook">
+            <button id="videosSearchBtn"
+                    class="videos-search-btn"
+                    type="button"
+                    onclick="buscarVideoFacebook()"
+                    aria-label="Buscar vídeo">🔎</button>
+        </div>
+
+        <div id="videosStatus" class="videos-status"></div>
+
+        <div id="videosHowto" class="videos-howto">
+            <div class="videos-howto-title">Como copiar o link</div>
+            <div class="videos-howto-video" aria-label="Exemplo visual: abrir o vídeo, tocar nos três pontinhos no canto inferior direito e copiar o link">
+                <div class="videos-howto-play">▶</div>
+                <div class="videos-howto-dots">⋮</div>
+            </div>
+            <div class="videos-howto-caption">Abra o vídeo no Facebook → toque nos <strong>⋮</strong> no canto inferior direito → <strong>Copiar link</strong>.</div>
+        </div>
+
+        <div id="videosResult" class="videos-result">
+            <div class="videos-result-box">
+                <div class="videos-preview-card">
+                    <img id="videosThumb" class="videos-preview" alt="Prévia do vídeo" style="display:none">
+                    <div id="videosPreviewPlaceholder" class="videos-preview-placeholder">
+                        <span>▶</span>
+                    </div>
+                    <div id="videosTitle" class="videos-result-title"></div>
+                </div>
+                <button id="videosDownload" class="videos-download" type="button" onclick="baixarVideoFacebook()" style="display:none">
+                    ⬇️ Baixar agora
+                </button>
+            </div>
+        </div>
+
+        <div class="videos-note">
+            💡 Esta aba não incorpora o site do downloader. Ela conversa diretamente com o serviço
+            de processamento e mostra somente o resultado dentro do seu Diário.
+            Funciona para vídeos públicos que o serviço conseguir processar.
+        </div>
+    </div>
+</section>
+
+<script id="videos-download-final-js">
+(function(){
+    const API_VIDEOS = 'https://fdown.isuru.eu.org';
+
+    function videoSetStatus(msg, type){
+        const el = document.getElementById('videosStatus');
+        if(!el) return;
+        el.style.display = msg ? 'block' : 'none';
+        el.textContent = msg || '';
+        el.style.background = type === 'error' ? '#ffe8ee' : '#f8f2ff';
+    }
+
+    function videoResetResult(){
+        const result = document.getElementById('videosResult');
+        const thumb = document.getElementById('videosThumb');
+        const placeholder = document.getElementById('videosPreviewPlaceholder');
+        const title = document.getElementById('videosTitle');
+        const download = document.getElementById('videosDownload');
+        const howto = document.getElementById('videosHowto');
+        if(result) result.style.display = 'none';
+        if(howto) howto.style.display = 'block';
+        if(thumb){ thumb.style.display='none'; thumb.removeAttribute('src'); }
+        if(placeholder) placeholder.style.display='flex';
+        if(title) title.textContent='';
+        if(download) download.style.display='none';
+        window._facebookDownloadUrl = '';
+    }
+
+    function videoFindThumbnail(data){
+        return data?.thumbnail || data?.thumbnail_url || data?.thumbnailUrl || data?.video_info?.thumbnail || data?.video_info?.thumbnail_url || data?.video_info?.thumbnailUrl || '';
+    }
+
+    function videoFindTitle(data){
+        return data?.title || data?.name || data?.video_info?.title || data?.video_info?.name || 'Vídeo do Facebook';
+    }
+
+    async function videoDownloadFromUrl(link){
+        const response = await fetch(link, {mode:'cors'});
+        if(!response.ok) throw new Error('O servidor não permitiu o download direto.');
+
+        const total = Number(response.headers.get('content-length')) || 0;
+        const reader = response.body?.getReader();
+        let received = 0;
+        let chunks = [];
+
+        if(reader){
+            while(true){
+                const {done, value} = await reader.read();
+                if(done) break;
+                if(value){
+                    chunks.push(value);
+                    received += value.length;
+                    if(total > 0){
+                        const percent = Math.min(100, Math.round((received / total) * 100));
+                        videoSetStatus('⬇️ Aguardando download... ' + percent + '%');
+                    }else{
+                        videoSetStatus('⬇️ Aguardando download... ' + Math.round(received / 1024 / 1024 * 10) / 10 + ' MB');
+                    }
+                }
+            }
+        }else{
+            videoSetStatus('⬇️ Aguardando download...');
+            const blob = await response.blob();
+            chunks = [new Uint8Array(await blob.arrayBuffer())];
+            received = blob.size;
+        }
+
+        const blob = new Blob(chunks, {type: response.headers.get('content-type') || 'video/mp4'});
+        if(!blob.size) throw new Error('O arquivo do vídeo veio vazio.');
+
+        videoSetStatus('⬇️ Aguardando download... 100%');
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'video-facebook.mp4';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(()=>{ URL.revokeObjectURL(blobUrl); a.remove(); },1500);
+    }
+
+    window.baixarVideoFacebook = async function(){
+        const link = window._facebookDownloadUrl || '';
+        const btn = document.getElementById('videosDownload');
+        if(!link){
+            videoSetStatus('⚠️ O download ainda não está pronto.','error');
+            return;
+        }
+        if(btn) btn.disabled = true;
+        videoSetStatus('⬇️ Aguardando download... 0%');
+        try{
+            await videoDownloadFromUrl(link);
+            videoSetStatus('✅ Download concluído.');
+        }catch(err){
+            videoSetStatus('⚠️ Não foi possível iniciar o download automático. O servidor não autorizou o acesso direto ao arquivo.','error');
+        }finally{
+            if(btn) btn.disabled = false;
+        }
+    };
+
+    window.buscarVideoFacebook = async function(){
+        const input = document.getElementById('videosFacebookUrl');
+        const btn = document.getElementById('videosSearchBtn');
+        const url = (input?.value || '').trim();
+
+        if(!url){
+            videoSetStatus('Cole primeiro o link do vídeo do Facebook.','error');
+            input?.focus();
+            return;
+        }
+
+        if(!/^https?:\/\/(www\.|m\.|web\.)?(facebook\.com|fb\.watch)\//i.test(url)){
+            videoSetStatus('Esse endereço não parece ser um link do Facebook.','error');
+            return;
+        }
+
+        videoResetResult();
+        const howto = document.getElementById('videosHowto');
+        if(howto) howto.style.display = 'none';
+        if(btn) btn.disabled = true;
+        videoSetStatus('⏳ Carregando o vídeo...');
+
+        try{
+            const resp = await fetch(API_VIDEOS + '/info', {
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({url:url, quality:'best'})
+            });
+
+            const data = await resp.json().catch(()=>({}));
+            if(!resp.ok || data.status === 'error'){
+                throw new Error(data.message || 'Não foi possível processar esse vídeo.');
+            }
+
+            let link = data.download_url || data.url || data.direct_url || data.video_url || data.video_info?.download_url || data.video_info?.url || '';
+
+            if(!link){
+                const downloadResp = await fetch(API_VIDEOS + '/download', {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({url:url, quality:'best'})
+                });
+                const contentType = downloadResp.headers.get('content-type') || '';
+                if(contentType.includes('application/json')){
+                    const downloadData = await downloadResp.json().catch(()=>({}));
+                    link = downloadData.download_url || downloadData.url || downloadData.direct_url || downloadData.video_url || '';
+                }else if(downloadResp.ok){
+                    const blob = await downloadResp.blob();
+                    if(blob.size){
+                        link = URL.createObjectURL(blob);
+                        window._facebookDownloadUrlIsBlob = true;
+                    }
+                }
+            }
+
+            if(!link){
+                throw new Error('Não foi possível gerar o download deste vídeo.');
+            }
+
+            const thumb = videoFindThumbnail(data);
+            const img = document.getElementById('videosThumb');
+            const placeholder = document.getElementById('videosPreviewPlaceholder');
+            const title = document.getElementById('videosTitle');
+            if(thumb && img){
+                img.src = thumb;
+                img.style.display = 'block';
+                if(placeholder) placeholder.style.display = 'none';
+                img.onerror = function(){ this.style.display='none'; if(placeholder) placeholder.style.display='flex'; };
+            }
+            if(title) title.textContent = videoFindTitle(data);
+
+            window._facebookDownloadUrl = link;
+            const download = document.getElementById('videosDownload');
+            if(download) download.style.display = 'flex';
+            document.getElementById('videosResult').style.display='block';
+            videoSetStatus('✅ Vídeo encontrado. Confira a prévia e toque em “Baixar agora”.');
+        }catch(err){
+            videoSetStatus('⚠️ ' + (err.message || 'O serviço não respondeu. Tente outro link.'),'error');
+        }finally{
+            if(btn) btn.disabled=false;
+        }
+    };
+
+    const videoInput = document.getElementById('videosFacebookUrl');
+    if(videoInput){
+        videoInput.addEventListener('input', function(){
+            const howto = document.getElementById('videosHowto');
+            if(howto) howto.style.display = this.value.trim() ? 'none' : 'block';
+            if(!this.value.trim()) videoResetResult();
+        });
+        videoInput.addEventListener('paste', function(){
+            setTimeout(function(){
+                const value = videoInput.value.trim();
+                if(value && /^https?:\/\/(www\.|m\.|web\.)?(facebook\.com|fb\.watch)\//i.test(value)){
+                    window.buscarVideoFacebook();
+                }
+            },80);
+        });
+    }
+
+    document.addEventListener('keydown', function(e){
+        if(e.key==='Enter' && document.activeElement?.id==='videosFacebookUrl'){
+            e.preventDefault();
+            window.buscarVideoFacebook();
+        }
+    });
+
+    window.addEventListener('load',function(){
+        const d=document.getElementById('dataVideos');
+        if(d) d.textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+    });
+})();
+</script>
+
+
+
 <!-- ================= CONFIG ================= -->
 
 <section id="config" class="page">
@@ -2038,6 +2386,11 @@ Escolha o som suave para os botões.
 </div>
 
 <div class="card">
+<button id="btnGerenciarAbas" class="btn blue" type="button" style="width:100%" onclick="alternarGerenciadorAbas()">⚙️ Gerenciar abas</button>
+<div id="gerenciadorAbas" class="tabs-manager" hidden style="margin-top:10px"></div>
+</div>
+
+<div class="card">
 <div class="card-title">
     <strong>🧹 Dados</strong>
 </div>
@@ -2059,24 +2412,18 @@ Escolha o som suave para os botões.
 
 <!-- ================= CRÉDITOS ================= -->
 <div class="credits-bg" id="modalCreditos" onclick="fecharCreditos(event)">
-  <div class="credits-modal balloon-game-modal" onclick="event.stopPropagation()">
+  <div class="credits-modal" onclick="event.stopPropagation()">
     <button type="button" class="credits-close" onclick="fecharCreditos()" title="Fechar">×</button>
-    <div class="credits-flower">⭐ 🎈 ⭐</div>
-    <h2>Encha o balão! 🎈</h2>
-    <p class="balloon-instruction" id="balloonInstruction">Toque no balão para o bonequinho enchê-lo.</p>
-    <div class="balloon-stage">
-      <div class="little-person">🧑‍🔧</div>
-      <button type="button" class="game-balloon" id="gameBalloon" onclick="encherBalao()">🎈</button>
-      <div class="balloon-string"></div>
-      <p id="balloonMessage" class="balloon-message" hidden></p>
-    </div>
-    <div class="balloon-meter"><span id="balloonMeterFill"></span></div>
-    <button type="button" class="btn" id="creditsContinue" onclick="mostrarCreditosFinais()" hidden>Ver créditos 💖</button>
-    <div id="creditsFinal" class="credits-final" hidden>
-      <p><b>By: Lala.Apks🎈🐱</b></p>
-      <p>☀️ Iara Cruz</p>
-      <p><b>Oferecimento:</b><br>
-        Aos meus irmãos e à minha mãe, com muito carinho. 💖
+    <div class="credits-flower">⭐ 💖 ⭐</div>
+    <h2>Oferecimento 💖</h2>
+    <p style="text-align:center;line-height:1.6;margin:0 0 18px;">
+      Este aplicativo é oferecido com muito carinho aos meus irmãos e à minha mãe. 🌷
+    </p>
+
+    <div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.65);line-height:1.6;">
+      <p style="margin:0 0 8px;"><b>🔐 Informação importante sobre seus dados</b></p>
+      <p style="margin:0;font-size:.94em;">
+        Seus dados pessoais e informações do aplicativo ficam salvos no <b>armazenamento local (Local Storage)</b> do seu dispositivo. A administração não tem acesso a esses dados. O acesso da administração fica restrito às <b>mensagens do Chat</b> e à <b>aba de Indicação</b>, somente para gerenciamento e moderação.
       </p>
     </div>
   </div>
@@ -4203,6 +4550,84 @@ function carregarPreferenciaMenu(){
     atualizarNotificacoes();
 }
 
+
+/* ================= GERENCIADOR DE ABAS ================= */
+const ABAS_MENU = [
+    {id:'inicio', nome:'Início', icone:'🏠', protegida:true},
+    {id:'rotina', nome:'Rotina', icone:'📋'},
+    {id:'calendario', nome:'Agenda', icone:'🗓️'},
+    {id:'notas', nome:'Notas', icone:'📝'},
+    {id:'estudos', nome:'Estudo', icone:'📚'},
+    {id:'financas', nome:'Finanças', icone:'💰'},
+    {id:'cardapio', nome:'Cardápio', icone:'🍓'},
+    {id:'baixarvideos', nome:'Vídeos', icone:'FB'},
+    {id:'config', nome:'Ajustes', icone:'⚙️', protegida:true}
+];
+
+function abasRemovidas(){
+    try{return JSON.parse(localStorage.getItem('agenda_abas_removidas') || '[]');}
+    catch{return [];}
+}
+
+function salvarAbasRemovidas(lista){
+    localStorage.setItem('agenda_abas_removidas', JSON.stringify(lista));
+}
+
+function atualizarMenuAbas(){
+    const removidas=abasRemovidas();
+    document.querySelectorAll('.menu-btn[data-tab-key]').forEach(btn=>{
+        const id=btn.getAttribute('data-tab-key');
+        btn.style.display=removidas.includes(id) ? 'none' : '';
+    });
+    renderGerenciadorAbas();
+}
+
+function removerAba(id){
+    const aba=ABAS_MENU.find(a=>a.id===id);
+    if(!aba || aba.protegida) return;
+    const removidas=abasRemovidas();
+    if(!removidas.includes(id)) removidas.push(id);
+    salvarAbasRemovidas(removidas);
+    if(document.getElementById(id)?.classList.contains('active')) abrirPorId('inicio');
+    atualizarMenuAbas();
+    tocarSom();
+}
+
+function restaurarAbas(){
+    salvarAbasRemovidas([]);
+    atualizarMenuAbas();
+    tocarSom();
+}
+
+function alternarGerenciadorAbas(){
+    const box=$('gerenciadorAbas');
+    const btn=$('btnGerenciarAbas');
+    if(!box) return;
+    const abrir=!box.hidden;
+    box.hidden=abrir;
+    if(btn) btn.textContent='⚙️ Gerenciar abas';
+    if(!abrir) renderGerenciadorAbas();
+}
+
+function renderGerenciadorAbas(){
+    const box=$('gerenciadorAbas');
+    if(!box) return;
+    const removidas=abasRemovidas();
+    box.innerHTML=ABAS_MENU.map(aba=>{
+        const removida=removidas.includes(aba.id);
+        if(aba.protegida){
+            return `<div class="tab-manager-row"><div class="tab-manager-name"><span>${aba.icone}</span>${aba.nome}</div><span class="tab-manager-protected">fixa</span></div>`;
+        }
+        return `<div class="tab-manager-row"><div class="tab-manager-name"><span>${aba.icone}</span>${aba.nome}</div><button type="button" class="tab-manager-remove" onclick="${removida ? `restaurarUmaAba('${aba.id}')` : `removerAba('${aba.id}')`}">${removida ? '↩️ Restaurar' : '✕ Excluir'}</button></div>`;
+    }).join('');
+}
+
+function restaurarUmaAba(id){
+    salvarAbasRemovidas(abasRemovidas().filter(x=>x!==id));
+    atualizarMenuAbas();
+    tocarSom();
+}
+
 function resetarApp() {
     if(confirm('Tem certeza que deseja restaurar as configurações originais? Todos os dados serão limpos.')) {
         localStorage.clear();
@@ -4237,6 +4662,7 @@ setInterval(()=>{
 
 window.onload = function() {
     carregarPreferenciaMenu();
+    atualizarMenuAbas();
     atualizarNotificacoes();
 
     const temaSalvo = localStorage.getItem('agenda_tema') || 'claro';
@@ -4538,6 +4964,41 @@ body.classic.menu-inferior .main {
     box-shadow:0 1px 3px rgba(0,0,0,.16);
 }
 
+<style id="menu-abas-personalizavel">
+/* Impede seleção/cópia de texto somente dentro da barra de menu. */
+.side-menu,
+.side-menu *{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+
+.menu-btn{position:relative;}
+.menu-btn .menu-delete{
+  position:absolute;
+  top:2px;
+  right:2px;
+  width:20px;
+  height:20px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:#e85d75;
+  color:#fff;
+  font-size:14px;
+  line-height:20px;
+  font-weight:800;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:5;
+  box-shadow:0 2px 6px rgba(0,0,0,.18);
+  cursor:pointer;
+}
+.menu-btn.menu-editing .menu-delete{display:flex;}
+.menu-btn.menu-editing{z-index:6;}
+.menu-btn.menu-hidden{display:none !important;}
+</style>
 </style>
 <script id="melhorias-temas-final-js">
 (function(){
