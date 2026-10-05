@@ -1,1 +1,4 @@
-Essa é a versão original do aplicativo que foi compartilhado
+🛠️💖 Estamos atualizando o LeveNote!
+✨ Aguarde só 2 minutinhos e atualize a página.
+
+by: Iara ☀️🎈
