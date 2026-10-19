@@ -2058,14 +2058,6 @@ body.dark #lnRaffleAdminPopup .ln-raffle-admin-card,body.classic #lnRaffleAdminP
       Cardápio
      </small>
     </button>
-    <button class="menu-btn" data-tab-key="baixarvideos" onclick="abrir('baixarvideos',this)">
-     <span>
-      🎬
-     </span>
-     <small>
-      Vídeos
-     </small>
-    </button>
     <button class="menu-btn" data-tab-key="comunidade" onclick="abrir('comunidade',this);onlineInicializar()">
      <span>
       💬
@@ -2552,352 +2544,6 @@ body.dark #lnRaffleAdminPopup .ln-raffle-admin-card,body.classic #lnRaffleAdminP
      <div class="card" id="lixeiraConteudo">
      </div>
     </section>
-    <style id="estilo-baixador-facebook">
-     /* ===== ABA FB — ETAPA 2 ===== */
-.facebook-downloader-card{background:linear-gradient(135deg,#eef6ff,#fff7fb);border:1px solid #d9e5f3;border-radius:22px;padding:16px;box-shadow:0 7px 20px var(--sombra);margin-bottom:12px}
-.facebook-downloader-title{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.facebook-downloader-title .icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#1877f2;color:#fff;font-size:15px;font-weight:900;letter-spacing:-.5px;box-shadow:0 5px 12px rgba(24,119,242,.22)}
-.facebook-downloader-title strong{font-family:'Fredoka',sans-serif;color:#26384d;font-size:calc(17px * var(--escala-fonte))}
-.facebook-downloader-card p{margin:7px 0 12px;color:#536273;font-size:calc(11px * var(--escala-fonte));line-height:1.5;font-weight:600}
-.videos-tool-card{background:transparent}
-.videos-tool-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.videos-tool-icon{width:46px;height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:#1877f2;color:#fff;font-size:16px;font-weight:900;box-shadow:0 6px 14px rgba(24,119,242,.2)}
-.videos-tool-title{font-weight:800;color:#243247;font-size:calc(17px * var(--escala-fonte))}
-.videos-tool-sub{margin-top:2px;color:#718096;font-size:calc(10px * var(--escala-fonte));font-weight:600}
-.videos-url-row{display:flex;gap:8px;align-items:stretch}
-.videos-url-input{flex:1;min-width:0;height:48px!important;margin:0!important;padding:0 14px!important;border-radius:15px!important;border:1px solid #d7e0ec!important;background:#fff!important;color:#172033!important;box-shadow:0 5px 15px rgba(60,80,110,.07)}
-.videos-url-input:focus{outline:none!important;border-color:#1877f2!important;box-shadow:0 0 0 3px rgba(24,119,242,.12)!important}
-.videos-search-btn{width:50px;border:0;border-radius:15px;background:#1877f2;color:#fff;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 6px 14px rgba(24,119,242,.2)}
-.videos-search-btn:disabled{opacity:.65;cursor:wait}
-.videos-status{display:none;margin-top:9px;padding:9px 11px;border-radius:12px;color:#4b5563;font-size:calc(10px * var(--escala-fonte));font-weight:700}
-.videos-howto{margin-top:13px;padding:12px;border-radius:18px;background:rgba(255,255,255,.82);border:1px solid #e1e8f1}
-.videos-howto-title{font-weight:800;color:#26384d;font-size:calc(12px * var(--escala-fonte));margin-bottom:9px;text-align:center}
-.videos-howto-video{position:relative;height:118px;border-radius:15px;overflow:hidden;background:linear-gradient(135deg,#dcecff,#f1e5ff);box-shadow:inset 0 0 0 1px rgba(255,255,255,.55)}
-.videos-howto-video:before{content:'VÍDEO DO FACEBOOK';position:absolute;left:12px;top:10px;padding:4px 7px;border-radius:7px;background:rgba(0,0,0,.28);color:#fff;font-size:8px;font-weight:800;letter-spacing:.4px}
-.videos-howto-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:43px;height:43px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.94);color:#1877f2;font-size:19px;padding-left:2px;box-shadow:0 5px 14px rgba(30,50,80,.2)}
-.videos-howto-dots{position:absolute;right:10px;bottom:9px;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.58);color:#fff;font-size:20px;font-weight:900;line-height:1}
-.videos-howto-caption{margin-top:9px;text-align:center;color:#536273;font-size:calc(9.5px * var(--escala-fonte));line-height:1.4;font-weight:600}
-.videos-result{display:none;margin-top:13px}
-.videos-result-box{padding:0;border-radius:18px;background:transparent}
-.videos-download{display:flex;align-items:center;justify-content:center;width:100%;box-sizing:border-box;margin-top:11px;padding:12px;border-radius:14px;background:#1877f2;color:#fff!important;text-decoration:none;font-weight:800;font-size:calc(12px * var(--escala-fonte));box-shadow:0 7px 15px rgba(24,119,242,.2)}
-.videos-note{margin-top:11px;padding:9px 10px;border-radius:12px;background:rgba(255,255,255,.65);color:#718096;font-size:calc(9px * var(--escala-fonte));line-height:1.45;font-weight:600}
-body.dark .facebook-downloader-card,body.classic .facebook-downloader-card{background:#1e293b;border-color:#334155}
-body.dark .facebook-downloader-title strong,body.classic .facebook-downloader-title strong,body.dark .facebook-downloader-card p,body.classic .facebook-downloader-card p{color:#fff!important}
-body.dark .videos-tool-title,body.classic .videos-tool-title,body.dark .videos-howto-title,body.classic .videos-howto-title{color:#fff!important}
-body.dark .videos-tool-sub,body.classic .videos-tool-sub,body.dark .videos-howto-caption,body.classic .videos-howto-caption,body.dark .videos-note,body.classic .videos-note{color:#dbe4f5!important}
-body.dark .videos-url-input,body.classic .videos-url-input{background:#fff!important;color:#111!important}
-body.dark .videos-howto,body.classic .videos-howto{background:#243247;border-color:#3a4b63}
-body.dark .videos-howto-video,body.classic .videos-howto-video{background:#1d3552}
-@media(max-width:560px){.videos-url-row{gap:6px}.videos-search-btn{width:48px}.videos-howto-video{height:105px}}
-
-.videos-preview-card{margin-top:2px;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 5px 16px rgba(30,50,80,.12);border:1px solid #e1e8f1}
-.videos-preview{display:block;width:100%;max-height:260px;object-fit:cover;background:#e8eef7}
-.videos-preview-placeholder{height:180px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#dcecff,#f1e5ff);color:#1877f2;font-size:34px}
-.videos-result-title{padding:10px 12px;font-weight:800;color:#26384d;font-size:calc(11px * var(--escala-fonte));text-align:center}
-.videos-download:disabled{opacity:.65;cursor:wait}
-body.dark .videos-preview-card,body.classic .videos-preview-card{background:#1e293b;border-color:#334155}
-body.dark .videos-result-title,body.classic .videos-result-title{color:#fff!important}
-    </style>
-    <!-- ================= BAIXAR VÍDEOS ================= -->
-    <section class="page" id="baixarvideos">
-     <div class="top">
-      <div>
-       <div class="date" id="dataVideos">
-       </div>
-       <h1>
-        Baixar vídeos 🎬
-       </h1>
-       <div class="subtitle">
-        Facebook • dentro do seu Diário
-       </div>
-      </div>
-      <div class="flower-icon" style="font-size:28px">
-       🍓
-      </div>
-     </div>
-     <div class="videos-tool-card">
-      <div class="videos-tool-head">
-       <div aria-label="Facebook" class="videos-tool-icon">
-        FB
-       </div>
-       <div>
-        <div class="videos-tool-title">
-         Baixador de vídeos
-        </div>
-        <div class="videos-tool-sub">
-         Cole o link e receba as opções aqui mesmo.
-        </div>
-       </div>
-      </div>
-      <div class="videos-url-row">
-       <input aria-label="Link do vídeo do Facebook" autocomplete="off" class="videos-url-input" id="videosFacebookUrl" inputmode="url" placeholder="Cole o link do Facebook..." type="url"/>
-       <button aria-label="Buscar vídeo" class="videos-search-btn" id="videosSearchBtn" onclick="buscarVideoFacebook()" type="button">
-        🔎
-       </button>
-      </div>
-      <div class="videos-status" id="videosStatus">
-      </div>
-      <div class="videos-howto" id="videosHowto">
-       <div class="videos-howto-title">
-        Como copiar o link
-       </div>
-       <div aria-label="Exemplo visual: abrir o vídeo, tocar nos três pontinhos no canto inferior direito e copiar o link" class="videos-howto-video">
-        <div class="videos-howto-play">
-         ▶
-        </div>
-        <div class="videos-howto-dots">
-         ⋮
-        </div>
-       </div>
-       <div class="videos-howto-caption">
-        Abra o vídeo no Facebook → toque nos
-        <strong>
-         ⋮
-        </strong>
-        no canto inferior direito →
-        <strong>
-         Copiar link
-        </strong>
-        .
-       </div>
-      </div>
-      <div class="videos-result" id="videosResult">
-       <div class="videos-result-box">
-        <div class="videos-preview-card">
-         <img alt="Prévia do vídeo" class="videos-preview" id="videosThumb" style="display:none"/>
-         <div class="videos-preview-placeholder" id="videosPreviewPlaceholder">
-          <span>
-           ▶
-          </span>
-         </div>
-         <div class="videos-result-title" id="videosTitle">
-         </div>
-        </div>
-        <button class="videos-download" id="videosDownload" onclick="baixarVideoFacebook()" style="display:none" type="button">
-         ⬇️ Baixar agora
-        </button>
-       </div>
-      </div>
-      <div class="videos-note">
-       💡 Esta aba não incorpora o site do downloader. Ela conversa diretamente com o serviço
-            de processamento e mostra somente o resultado dentro do seu Diário.
-            Funciona para vídeos públicos que o serviço conseguir processar.
-      </div>
-     </div>
-    </section>
-    <script id="videos-download-final-js">
-     (function(){
-    const API_VIDEOS = 'https://fdown.isuru.eu.org';
-
-    function videoSetStatus(msg, type){
-        const el = document.getElementById('videosStatus');
-        if(!el) return;
-        el.style.display = msg ? 'block' : 'none';
-        el.textContent = msg || '';
-        el.style.background = type === 'error' ? '#ffe8ee' : '#f8f2ff';
-    }
-
-    function videoResetResult(){
-        const result = document.getElementById('videosResult');
-        const thumb = document.getElementById('videosThumb');
-        const placeholder = document.getElementById('videosPreviewPlaceholder');
-        const title = document.getElementById('videosTitle');
-        const download = document.getElementById('videosDownload');
-        const howto = document.getElementById('videosHowto');
-        if(result) result.style.display = 'none';
-        if(howto) howto.style.display = 'block';
-        if(thumb){ thumb.style.display='none'; thumb.removeAttribute('src'); }
-        if(placeholder) placeholder.style.display='flex';
-        if(title) title.textContent='';
-        if(download) download.style.display='none';
-        window._facebookDownloadUrl = '';
-    }
-
-    function videoFindThumbnail(data){
-        return data?.thumbnail || data?.thumbnail_url || data?.thumbnailUrl || data?.video_info?.thumbnail || data?.video_info?.thumbnail_url || data?.video_info?.thumbnailUrl || '';
-    }
-
-    function videoFindTitle(data){
-        return data?.title || data?.name || data?.video_info?.title || data?.video_info?.name || 'Vídeo do Facebook';
-    }
-
-    async function videoDownloadFromUrl(link){
-        const response = await fetch(link, {mode:'cors'});
-        if(!response.ok) throw new Error('O servidor não permitiu o download direto.');
-
-        const total = Number(response.headers.get('content-length')) || 0;
-        const reader = response.body?.getReader();
-        let received = 0;
-        let chunks = [];
-
-        if(reader){
-            while(true){
-                const {done, value} = await reader.read();
-                if(done) break;
-                if(value){
-                    chunks.push(value);
-                    received += value.length;
-                    if(total > 0){
-                        const percent = Math.min(100, Math.round((received / total) * 100));
-                        videoSetStatus('⬇️ Aguardando download... ' + percent + '%');
-                    }else{
-                        videoSetStatus('⬇️ Aguardando download... ' + Math.round(received / 1024 / 1024 * 10) / 10 + ' MB');
-                    }
-                }
-            }
-        }else{
-            videoSetStatus('⬇️ Aguardando download...');
-            const blob = await response.blob();
-            chunks = [new Uint8Array(await blob.arrayBuffer())];
-            received = blob.size;
-        }
-
-        const blob = new Blob(chunks, {type: response.headers.get('content-type') || 'video/mp4'});
-        if(!blob.size) throw new Error('O arquivo do vídeo veio vazio.');
-
-        videoSetStatus('⬇️ Aguardando download... 100%');
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = 'video-facebook.mp4';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(()=>{ URL.revokeObjectURL(blobUrl); a.remove(); },1500);
-    }
-
-    window.baixarVideoFacebook = async function(){
-        const link = window._facebookDownloadUrl || '';
-        const btn = document.getElementById('videosDownload');
-        if(!link){
-            videoSetStatus('⚠️ O download ainda não está pronto.','error');
-            return;
-        }
-        if(btn) btn.disabled = true;
-        videoSetStatus('⬇️ Aguardando download... 0%');
-        try{
-            await videoDownloadFromUrl(link);
-            videoSetStatus('✅ Download concluído.');
-        }catch(err){
-            videoSetStatus('⚠️ Não foi possível iniciar o download automático. O servidor não autorizou o acesso direto ao arquivo.','error');
-        }finally{
-            if(btn) btn.disabled = false;
-        }
-    };
-
-    window.buscarVideoFacebook = async function(){
-        const input = document.getElementById('videosFacebookUrl');
-        const btn = document.getElementById('videosSearchBtn');
-        const url = (input?.value || '').trim();
-
-        if(!url){
-            videoSetStatus('Cole primeiro o link do vídeo do Facebook.','error');
-            input?.focus();
-            return;
-        }
-
-        if(!/^https?:\/\/(www\.|m\.|web\.)?(facebook\.com|fb\.watch)\//i.test(url)){
-            videoSetStatus('Esse endereço não parece ser um link do Facebook.','error');
-            return;
-        }
-
-        videoResetResult();
-        const howto = document.getElementById('videosHowto');
-        if(howto) howto.style.display = 'none';
-        if(btn) btn.disabled = true;
-        videoSetStatus('⏳ Carregando o vídeo...');
-
-        try{
-            const resp = await fetch(API_VIDEOS + '/info', {
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({url:url, quality:'best'})
-            });
-
-            const data = await resp.json().catch(()=>({}));
-            if(!resp.ok || data.status === 'error'){
-                throw new Error(data.message || 'Não foi possível processar esse vídeo.');
-            }
-
-            let link = data.download_url || data.url || data.direct_url || data.video_url || data.video_info?.download_url || data.video_info?.url || '';
-
-            if(!link){
-                const downloadResp = await fetch(API_VIDEOS + '/download', {
-                    method:'POST',
-                    headers:{'Content-Type':'application/json'},
-                    body:JSON.stringify({url:url, quality:'best'})
-                });
-                const contentType = downloadResp.headers.get('content-type') || '';
-                if(contentType.includes('application/json')){
-                    const downloadData = await downloadResp.json().catch(()=>({}));
-                    link = downloadData.download_url || downloadData.url || downloadData.direct_url || downloadData.video_url || '';
-                }else if(downloadResp.ok){
-                    const blob = await downloadResp.blob();
-                    if(blob.size){
-                        link = URL.createObjectURL(blob);
-                        window._facebookDownloadUrlIsBlob = true;
-                    }
-                }
-            }
-
-            if(!link){
-                throw new Error('Não foi possível gerar o download deste vídeo.');
-            }
-
-            const thumb = videoFindThumbnail(data);
-            const img = document.getElementById('videosThumb');
-            const placeholder = document.getElementById('videosPreviewPlaceholder');
-            const title = document.getElementById('videosTitle');
-            if(thumb && img){
-                img.src = thumb;
-                img.style.display = 'block';
-                if(placeholder) placeholder.style.display = 'none';
-                img.onerror = function(){ this.style.display='none'; if(placeholder) placeholder.style.display='flex'; };
-            }
-            if(title) title.textContent = videoFindTitle(data);
-
-            window._facebookDownloadUrl = link;
-            const download = document.getElementById('videosDownload');
-            if(download) download.style.display = 'flex';
-            document.getElementById('videosResult').style.display='block';
-            videoSetStatus('✅ Vídeo encontrado. Confira a prévia e toque em “Baixar agora”.');
-        }catch(err){
-            videoSetStatus('⚠️ ' + (err.message || 'O serviço não respondeu. Tente outro link.'),'error');
-        }finally{
-            if(btn) btn.disabled=false;
-        }
-    };
-
-    const videoInput = document.getElementById('videosFacebookUrl');
-    if(videoInput){
-        videoInput.addEventListener('input', function(){
-            const howto = document.getElementById('videosHowto');
-            if(howto) howto.style.display = this.value.trim() ? 'none' : 'block';
-            if(!this.value.trim()) videoResetResult();
-        });
-        videoInput.addEventListener('paste', function(){
-            setTimeout(function(){
-                const value = videoInput.value.trim();
-                if(value && /^https?:\/\/(www\.|m\.|web\.)?(facebook\.com|fb\.watch)\//i.test(value)){
-                    window.buscarVideoFacebook();
-                }
-            },80);
-        });
-    }
-
-    document.addEventListener('keydown', function(e){
-        if(e.key==='Enter' && document.activeElement?.id==='videosFacebookUrl'){
-            e.preventDefault();
-            window.buscarVideoFacebook();
-        }
-    });
-
-    window.addEventListener('load',function(){
-        const d=document.getElementById('dataVideos');
-        if(d) d.textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
-    });
-})();
-    </script>
     <!-- ================= COMUNIDADE / ONLINE ================= -->
     <section class="page" id="comunidade">
      <div class="top">
@@ -3124,9 +2770,6 @@ Seu apelido será usado em todo o aplicativo.
          </button>
          <button class="btn blue" onclick="onlineAdminCarregarSugestoes()">
           💌 Sugestões e dúvidas
-         </button>
-         <button class="btn" id="btnDesafioAdmin" onclick="window.leveNoteAbrirDesafioAdmin()" type="button">
-          🎯 Desafio
          </button>
          <button class="btn" id="btnRelatorioIndicacoes" onclick="onlineAbrirRelatorioIndicacoes()" type="button">
           🪅 Indicações
@@ -4995,7 +4638,28 @@ function excluirNota(i,e){e.stopPropagation();adicionarLixeira('Notas',notas[i])
 
 let aprendi = carregar('agenda_aprendi', [{texto: 'Terminei o módulo de HTML e CSS básico! 💻'}]);
 let estudar = carregar('agenda_estudar', [{texto: 'Rever funções em JavaScript 🚀'}]);
-let postits = carregar('agenda_postits', [{texto: 'Fazer resumo de redação ✍️'}]);
+let postits = carregar('agenda_postits', [
+ {texto:'🌷 Lembrete gentil: cuide de você também.',cor:'#f8c4d4'},
+ {texto:'🎯 Prioridade de hoje: concluir uma tarefa importante.',cor:'#faec82'},
+ {texto:'💧 Beber água e fazer uma pausa.',cor:'#ffd8b5'},
+ {texto:'📚 Estudar 20 minutos já é progresso.',cor:'#e1d2f5'},
+ {texto:'💚 Motivo para agradecer: __________________',cor:'#cce8cf'},
+ {texto:'✨ Inspiração visual',imagem:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="500" height="240" viewBox="0 0 500 240"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdce6"/><stop offset="1" stop-color="#d9cafa"/></linearGradient></defs><rect width="500" height="240" rx="24" fill="url(#g)"/><circle cx="250" cy="100" r="45" fill="#fff7c7"/><g fill="#fff"><ellipse cx="250" cy="48" rx="15" ry="27"/><ellipse cx="250" cy="152" rx="15" ry="27"/><ellipse cx="198" cy="100" rx="27" ry="15"/><ellipse cx="302" cy="100" rx="27" ry="15"/></g><text x="250" y="205" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#59475f">Floresça no seu tempo</text></svg>') ,cor:'#cbe8f7'}
+]);
+
+// Migração segura: quem já usava a aplicação também recebe seis modelos, sem apagar os post-its existentes.
+const modelosPostitExtras = [
+ {texto:'🌷 Lembrete gentil: cuide de você também.'},
+ {texto:'🎯 Prioridade de hoje: concluir uma tarefa importante.'},
+ {texto:'💧 Beber água e fazer uma pausa.'},
+ {texto:'📚 Estudar 20 minutos já é progresso.'},
+ {texto:'💚 Motivo para agradecer: __________________'},
+ {texto:'✨ Inspiração visual', imagem:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="500" height="240" viewBox="0 0 500 240"><rect width="500" height="240" rx="24" fill="#f8dcec"/><circle cx="250" cy="95" r="42" fill="#fff7c7"/><text x="250" y="190" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#59475f">Floresça no seu tempo</text></svg>')}
+];
+if(postits.length < 6){
+  modelosPostitExtras.forEach((modelo)=>{if(postits.length<6 && !postits.some(p=>p.texto===modelo.texto))postits.push({...modelo});});
+  salvar('agenda_postits',postits);
+}
 
 /* Post-its: sequência fixa de 6 cores: Rosa, Amarelo, Laranja, Lilás, Verde, Azul. */
 const coresPostit = ['#f8c4d4','#faec82','#ffd8b5','#e1d2f5','#cce8cf','#cbe8f7'];
@@ -5038,6 +4702,7 @@ function renderEstudos() {
         <div class="postit" style="background:${p.cor || coresPostit[0]}" onclick="alternarAcoesPostit(this)">
             <button class="postit-delete" aria-label="Excluir post-it" title="Excluir" onclick="event.stopPropagation();excluirPostit(${i})">×</button>
             <p>${escapeHtml(p.texto)}</p>
+            ${p.imagem ? `<img src="${p.imagem}" alt="Imagem da nota" loading="lazy" style="display:block;width:100%;max-height:115px;object-fit:cover;border-radius:10px;margin-top:8px">` : ''}
         </div>
     `).join('');
 }
@@ -5971,7 +5636,6 @@ const ABAS_MENU = [
     {id:'estudos', nome:'Estudo', icone:'📚'},
     {id:'financas', nome:'Finanças', icone:'💰'},
     {id:'cardapio', nome:'Cardápio', icone:'🍓'},
-    {id:'baixarvideos', nome:'Vídeos', icone:'FB'},
     {id:'comunidade', nome:'Chat', icone:'💬'},
     {id:'desafio', nome:'Desafios', icone:'🎮'},
     {id:'config', nome:'Ajustes', icone:'⚙️', protegida:true}
@@ -6489,6 +6153,7 @@ window.onlineAbrirApelidoModal=function(){
   const input=document.getElementById('onlineApelido');
   const err=document.getElementById('onlineApelidoErro');
   if(!modal)return;
+  if(window.onlineProfile?.apelido || window.onlineUser?.id && localStorage.getItem('ln_apelido_definido_'+window.onlineUser.id)==='1'){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); return false; }
   if(err){err.textContent='';err.classList.remove('show');}
   modal.classList.add('show');
   modal.setAttribute('aria-hidden','false');
@@ -6532,6 +6197,7 @@ async function onlineCarregarPerfil(){
   }
   onlineProfile=data;
   window.onlineProfile=onlineProfile;
+  try{localStorage.setItem('ln_apelido_definido_'+onlineUser.id,'1')}catch(e){}
   window.onlineUser=onlineUser;
   window.sb=sb;
   onlineEmojiSelecionado=data.emoji||'🪶';
@@ -10723,6 +10389,17 @@ body.menu-inferior .status-theme{bottom:calc(68px + env(safe-area-inset-bottom))
 })();
 </script>
 
+
+<style id="ln-chat-scroll-fix">
+#onlineChat{min-height:260px;max-height:min(62vh,680px);overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable;}
+body.ln-community-fullscreen #onlineChat{max-height:none!important;}
+#lnChatToTop{position:sticky;float:right;bottom:8px;z-index:8;width:34px;height:34px;border-radius:50%;background:#f7b7c8;color:#49323b;box-shadow:0 3px 10px rgba(0,0,0,.16);display:none;align-items:center;justify-content:center;font-size:17px;margin:-44px 8px 8px 0;opacity:.95}
+#lnChatToTop.show{display:flex}
+@media(max-width:700px){#onlineChat{max-height:58vh;min-height:240px;padding-bottom:12px}body.ln-community-fullscreen #onlineChat{max-height:none}}
+</style>
+<script id="ln-chat-scroll-fix-js">
+(function(){function init(){const box=document.getElementById('onlineChat');if(!box||document.getElementById('lnChatToTop'))return;const b=document.createElement('button');b.id='lnChatToTop';b.type='button';b.title='Subir ao topo do chat';b.setAttribute('aria-label','Subir ao topo do chat');b.textContent='↑';box.insertAdjacentElement('afterend',b);b.addEventListener('click',()=>box.scrollTo({top:0,behavior:'smooth'}));const update=()=>b.classList.toggle('show',box.scrollTop>180);box.addEventListener('scroll',update,{passive:true});const mo=new MutationObserver(()=>{if(box.scrollHeight<=box.clientHeight)b.classList.remove('show')});mo.observe(box,{childList:true,subtree:true});update();}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
+</script>
 </body>
 </html>
 <script id="levenote-final-nick-profile-mentions">
