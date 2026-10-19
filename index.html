@@ -3391,23 +3391,20 @@ document.getElementById('mercadoNome')?.addEventListener('keydown', e=>{
      Imagem (opcional)
     </label>
     <input accept="image/*" id="notaImagem" type="file"/>
-    <select id="notaHumor">
-     <option>
-      😊 Feliz
-     </option>
-     <option>
-      🥰 Muito feliz
-     </option>
-     <option>
-      😐 Normal
-     </option>
-     <option>
-      😢 Triste
-     </option>
-     <option>
-      😴 Cansada
-     </option>
-    </select>
+    <label style="display:block;margin:12px 0 7px;font-weight:700">Como você está se sentindo?</label>
+    <input id="notaHumor" type="hidden" value="😊 Feliz"/>
+    <div id="humorFigurinhas" class="humor-figurinhas" aria-label="Escolha seu humor">
+     <button type="button" class="humor-figurinha selected" data-humor="😊 Feliz" onclick="selecionarHumorNota(this)" aria-pressed="true"><span>😊</span><small>Feliz</small></button>
+     <button type="button" class="humor-figurinha" data-humor="🥰 Apaixonada" onclick="selecionarHumorNota(this)" aria-pressed="false"><span>🥰</span><small>Carinho</small></button>
+     <button type="button" class="humor-figurinha" data-humor="😂 Divertida" onclick="selecionarHumorNota(this)" aria-pressed="false"><span>😂</span><small>Rindo</small></button>
+     <button type="button" class="humor-figurinha" data-humor="😌 Em paz" onclick="selecionarHumorNota(this)" aria-pressed="false"><span>😌</span><small>Em paz</small></button>
+     <button type="button" class="humor-figurinha" data-humor="🥹 Emocionada" onclick="selecionarHumorNota(this)" aria-pressed="false"><span>🥹</span><small>Emocionada</small></button>
+     <button type="button" class="humor-figurinha" data-humor="😢 Triste" onclick="selecionarHumorNota(this)" aria-pressed="false"><span>😢</span><small>Triste</small></button>
+     <button type="button" class="humor-figurinha" data-humor="😤 Frustrada" onclick="selecionarHumorNota(this)" aria-pressed="false"><span>😤</span><small>Frustrada</small></button>
+     <button type="button" class="humor-figurinha" data-humor="😴 Cansada" onclick="selecionarHumorNota(this)" aria-pressed="false"><span>😴</span><small>Cansada</small></button>
+     <button type="button" class="humor-figurinha" data-humor="🤩 Animada" onclick="selecionarHumorNota(this)" aria-pressed="false"><span>🤩</span><small>Animada</small></button>
+     <button type="button" class="humor-figurinha" data-humor="🙏 Grata" onclick="selecionarHumorNota(this)" aria-pressed="false"><span>🙏</span><small>Grata</small></button>
+    </div>
     <button class="btn blue" onclick="salvarNota()" style="width:100%">
      Guardar nota 💙
     </button>
@@ -4579,11 +4576,50 @@ function abrirModalPorAba() {
 
 const imagemNotaExemplo = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="420" height="240"><rect width="420" height="240" rx="24" fill="#cce8cf"/><circle cx="210" cy="92" r="42" fill="#ffd8b5"/><path d="M168 86 Q210 28 252 86" fill="none" stroke="#7c9b78" stroke-width="16" stroke-linecap="round"/><text x="210" y="178" text-anchor="middle" font-family="Arial" font-size="24" fill="#355b43">Um dia de cada vez 🌿</text></svg>');
 let notas = carregar('agenda_notas', [
- {texto:'💍 Hoje eu conheci um rapaz que se chama João. Acho que vou casar com ele! 🥰💐',humor:'Muito feliz 😄',data:'2020-09-01',imagem:imagemNotaExemplo},
- {texto:'📱 Ganhei um celular Android e estou muito feliz! ✨🎉',humor:'Felicidade 🌟',data:'2013-02-01'},
- {texto:'❤️ Amo minha família e meus amigos! 🙏\nMinha oração diária é: Deus proteja todos eles. 🕊️✨',humor:'Gratidão 🙏',data:'2012-05-21'},
- {texto:'🎄 O Natal está chegando, minha data preferida do ano! 🎅🎁✨',humor:'Clima natalino 🎄',data:'2010-12-15'}
+ {texto:'🌷 Hoje quero lembrar que pequenas alegrias também fazem um dia especial.',humor:'😌 Em paz',data:'2025-01-12',imagem:imagemNotaExemplo},
+ {texto:'✨ Uma ideia de cada vez: não preciso resolver tudo hoje.',humor:'😊 Feliz',data:'2025-02-03'},
+ {texto:'💌 Quero guardar aqui uma mensagem bonita para o meu eu do futuro.',humor:'🥰 Apaixonada',data:'2025-02-18'},
+ {texto:'🌈 Mesmo depois de um dia difícil, sempre posso recomeçar.',humor:'🤩 Animada',data:'2025-03-07'},
+ {texto:'☕ Meu lembrete: fazer uma pausa, respirar e cuidar de mim.',humor:'😌 Em paz',data:'2025-03-21'},
+ {texto:'🌻 Hoje vou comemorar uma pequena conquista, por menor que pareça.',humor:'🙏 Grata',data:'2025-04-10'}
 ]);
+// Atualiza somente as notas de exemplo antigas, preservando todas as notas pessoais.
+const exemplosNotasAntigas = [
+ '💍 Hoje eu conheci um rapaz que se chama João. Acho que vou casar com ele! 🥰💐',
+ '📱 Ganhei um celular Android e estou muito feliz! ✨🎉',
+ '❤️ Amo minha família e meus amigos! 🙏\nMinha oração diária é: Deus proteja todos eles. 🕊️✨',
+ '🎄 O Natal está chegando, minha data preferida do ano! 🎅🎁✨',
+ '🌱 Quero cuidar melhor de mim: descansar, beber água e respeitar meu tempo.',
+ '📚 Ideia para lembrar: aprender um pouquinho por dia já é progresso.',
+ '🛒 Lembrete: organizar a semana e separar um momento para as coisas importantes.',
+ '🌅 Um novo começo não precisa ser perfeito; só precisa começar.',
+ '💌 Guardar aqui uma lembrança boa para reler quando eu precisar sorrir.',
+ '🎯 Minha meta da semana: dar um passo de cada vez e comemorar pequenas vitórias.'
+];
+const exemplosNotasNovas = [
+ {texto:'🌷 Hoje quero lembrar que pequenas alegrias também fazem um dia especial.',humor:'😌 Em paz',data:'2025-01-12',imagem:imagemNotaExemplo},
+ {texto:'✨ Uma ideia de cada vez: não preciso resolver tudo hoje.',humor:'😊 Feliz',data:'2025-02-03'},
+ {texto:'💌 Quero guardar aqui uma mensagem bonita para o meu eu do futuro.',humor:'🥰 Apaixonada',data:'2025-02-18'},
+ {texto:'🌈 Mesmo depois de um dia difícil, sempre posso recomeçar.',humor:'🤩 Animada',data:'2025-03-07'},
+ {texto:'☕ Meu lembrete: fazer uma pausa, respirar e cuidar de mim.',humor:'😌 Em paz',data:'2025-03-21'},
+ {texto:'🌻 Hoje vou comemorar uma pequena conquista, por menor que pareça.',humor:'🙏 Grata',data:'2025-04-10'}
+];
+try {
+ const chaveExemplosNotas='levenote_notas_exemplos_v2';
+ if(localStorage.getItem(chaveExemplosNotas)!=='1'){
+   const antigas=new Set(exemplosNotasAntigas.map(t=>t.toLocaleLowerCase()));
+   notas=notas.filter(n=>!antigas.has(String(n.texto||'').trim().toLocaleLowerCase()));
+   const textos=new Set(notas.map(n=>String(n.texto||'').trim().toLocaleLowerCase()));
+   for(const exemplo of exemplosNotasNovas){
+     if(!textos.has(exemplo.texto.toLocaleLowerCase())){
+       notas.push({...exemplo,criadoEm:Date.parse(exemplo.data)||Date.now()});
+       textos.add(exemplo.texto.toLocaleLowerCase());
+     }
+   }
+   salvar('agenda_notas',notas);
+   localStorage.setItem(chaveExemplosNotas,'1');
+ }
+} catch(e) { console.warn('Não foi possível atualizar as notas de exemplo.',e); }
 function formatarDataNota(d){let p=String(d||'').split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:d||'';}
 let ordemNotas = 'desc';
 // As notas novas ficam sempre no topo por padrão. A preferência do botão de ordem continua disponível.
@@ -4625,41 +4661,47 @@ function renderNotas(){
  lista.innerHTML=notas.map((n,i)=>`<div class="note" style="background:${n.cor}" onclick="expandirNota(event)"><div style="font-size:10px;font-weight:700">${escapeHtml(n.humor||'')} ${n.humor?'• ':''}${formatarDataNota(n.data)}</div>${n.imagem?`<img class="note-image" src="${n.imagem}" alt="Ilustração da nota">`:''}<p>${escapeHtml(n.texto)}</p><div class="note-actions"><button aria-label="Editar nota" title="Editar" onclick="editarNota(${i},event)">✏️</button><button aria-label="Excluir nota" title="Excluir" onclick="excluirNota(${i},event)">🗑️</button></div></div>`).join('');
 }
 function expandirNota(e){if(!e.target.closest('button'))e.currentTarget.classList.toggle('expanded');}
-function editarNota(i,e){e.stopPropagation();let n=notas[i];$('notaTexto').value=n.texto||'';$('notaHumor').value=n.humor||'😊 Feliz';$('notaImagem').value='';window.notaEditando=i;abrirModal('modalNota');}
+function selecionarHumorNota(botao){const campo=$('notaHumor');if(!campo||!botao)return;campo.value=botao.dataset.humor||'😊 Feliz';document.querySelectorAll('#humorFigurinhas .humor-figurinha').forEach(b=>{const ativo=b===botao;b.classList.toggle('selected',ativo);b.setAttribute('aria-pressed',ativo?'true':'false');});}
+function atualizarFigurinhasHumorNota(){const valor=$('notaHumor')?.value||'😊 Feliz';const botoes=[...document.querySelectorAll('#humorFigurinhas .humor-figurinha')];const escolhido=botoes.find(b=>b.dataset.humor===valor)||botoes[0];if(escolhido)selecionarHumorNota(escolhido);}
+function editarNota(i,e){e.stopPropagation();let n=notas[i];$('notaTexto').value=n.texto||'';$('notaHumor').value=n.humor||'😊 Feliz';atualizarFigurinhasHumorNota();$('notaImagem').value='';window.notaEditando=i;abrirModal('modalNota');}
 function salvarNota(){
  let texto=$('notaTexto').value.trim();if(!texto){alert('Escreva alguma coisa na nota.');return;}
  let i=window.notaEditando, f=$('notaImagem').files[0];
- const done=img=>{let old=Number.isInteger(i)?notas[i]:{};let item={texto,humor:$('notaHumor').value,data:old.data||new Date().toISOString().slice(0,10),criadoEm:old.criadoEm||Date.now(),imagem:img||old.imagem||'',cor:old.cor||escolherCorAleatoria(['#faec82','#f8c4d4','#cbe8f7','#cce8cf','#e1d2f5','#ffd8b5'],notas.length?notas[notas.length-1].cor:null)};if(Number.isInteger(i))notas[i]=item;else notas.push(item);window.notaEditando=null;salvar('agenda_notas',notas);$('notaTexto').value='';$('notaImagem').value='';fecharModais();renderNotas();};
+ const done=img=>{let old=Number.isInteger(i)?notas[i]:{};let item={texto,humor:$('notaHumor').value,data:old.data||new Date().toISOString().slice(0,10),criadoEm:old.criadoEm||Date.now(),imagem:img||old.imagem||'',cor:old.cor||escolherCorAleatoria(['#faec82','#f8c4d4','#cbe8f7','#cce8cf','#e1d2f5','#ffd8b5'],notas.length?notas[notas.length-1].cor:null)};if(Number.isInteger(i))notas[i]=item;else notas.push(item);window.notaEditando=null;salvar('agenda_notas',notas);$('notaTexto').value='';$('notaImagem').value='';$('notaHumor').value='😊 Feliz';atualizarFigurinhasHumorNota();fecharModais();renderNotas();};
  if(f){let r=new FileReader();r.onload=()=>done(r.result);r.readAsDataURL(f);}else done('');
 }
+atualizarFigurinhasHumorNota();
 function excluirNota(i,e){e.stopPropagation();adicionarLixeira('Notas',notas[i]);notas.splice(i,1);salvar('agenda_notas',notas);renderNotas();renderLixeira();}
 
 /* ================= ESTUDOS ================= */
 
 let aprendi = carregar('agenda_aprendi', [{texto: 'Terminei o módulo de HTML e CSS básico! 💻'}]);
 let estudar = carregar('agenda_estudar', [{texto: 'Rever funções em JavaScript 🚀'}]);
-let postits = carregar('agenda_postits', [
- {texto:'🌷 Lembrete gentil: cuide de você também.',cor:'#f8c4d4'},
- {texto:'🎯 Prioridade de hoje: concluir uma tarefa importante.',cor:'#faec82'},
- {texto:'💧 Beber água e fazer uma pausa.',cor:'#ffd8b5'},
- {texto:'📚 Estudar 20 minutos já é progresso.',cor:'#e1d2f5'},
- {texto:'💚 Motivo para agradecer: __________________',cor:'#cce8cf'},
- {texto:'✨ Inspiração visual',imagem:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="500" height="240" viewBox="0 0 500 240"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdce6"/><stop offset="1" stop-color="#d9cafa"/></linearGradient></defs><rect width="500" height="240" rx="24" fill="url(#g)"/><circle cx="250" cy="100" r="45" fill="#fff7c7"/><g fill="#fff"><ellipse cx="250" cy="48" rx="15" ry="27"/><ellipse cx="250" cy="152" rx="15" ry="27"/><ellipse cx="198" cy="100" rx="27" ry="15"/><ellipse cx="302" cy="100" rx="27" ry="15"/></g><text x="250" y="205" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#59475f">Floresça no seu tempo</text></svg>') ,cor:'#cbe8f7'}
-]);
+let postits = carregar('agenda_postits', [{texto: 'Fazer resumo de redação ✍️'}]);
+// Mantém seis exemplos de post-it na primeira migração, preservando os que a pessoa já criou.
+try {
+ const chaveExemplosPostits='levenote_postits_exemplos_v1';
+ if(localStorage.getItem(chaveExemplosPostits)!=='1'){
+   const exemplos=[
+     'Planejar a semana 🗓️',
+     'Beber água durante o dia 💧',
+     'Ler algumas páginas 📚',
+     'Anotar uma ideia criativa 💡',
+     'Separar um tempo para descansar 🌿'
+   ];
+   const existentes=new Set(postits.map(p=>String(p.texto||'').trim().toLocaleLowerCase()));
+   for(const texto of exemplos){
+     if(postits.length>=6)break;
+     if(!existentes.has(texto.toLocaleLowerCase())){
+       postits.push({texto,cor:['#f8c4d4','#faec82','#ffd8b5','#e1d2f5','#cce8cf','#cbe8f7'][postits.length%6]});
+       existentes.add(texto.toLocaleLowerCase());
+     }
+   }
+   salvar('agenda_postits',postits);
+   localStorage.setItem(chaveExemplosPostits,'1');
+ }
+} catch(e) { console.warn('Não foi possível preparar os post-its de exemplo.',e); }
 
-// Migração segura: quem já usava a aplicação também recebe seis modelos, sem apagar os post-its existentes.
-const modelosPostitExtras = [
- {texto:'🌷 Lembrete gentil: cuide de você também.'},
- {texto:'🎯 Prioridade de hoje: concluir uma tarefa importante.'},
- {texto:'💧 Beber água e fazer uma pausa.'},
- {texto:'📚 Estudar 20 minutos já é progresso.'},
- {texto:'💚 Motivo para agradecer: __________________'},
- {texto:'✨ Inspiração visual', imagem:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="500" height="240" viewBox="0 0 500 240"><rect width="500" height="240" rx="24" fill="#f8dcec"/><circle cx="250" cy="95" r="42" fill="#fff7c7"/><text x="250" y="190" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#59475f">Floresça no seu tempo</text></svg>')}
-];
-if(postits.length < 6){
-  modelosPostitExtras.forEach((modelo)=>{if(postits.length<6 && !postits.some(p=>p.texto===modelo.texto))postits.push({...modelo});});
-  salvar('agenda_postits',postits);
-}
 
 /* Post-its: sequência fixa de 6 cores: Rosa, Amarelo, Laranja, Lilás, Verde, Azul. */
 const coresPostit = ['#f8c4d4','#faec82','#ffd8b5','#e1d2f5','#cce8cf','#cbe8f7'];
@@ -4702,7 +4744,6 @@ function renderEstudos() {
         <div class="postit" style="background:${p.cor || coresPostit[0]}" onclick="alternarAcoesPostit(this)">
             <button class="postit-delete" aria-label="Excluir post-it" title="Excluir" onclick="event.stopPropagation();excluirPostit(${i})">×</button>
             <p>${escapeHtml(p.texto)}</p>
-            ${p.imagem ? `<img src="${p.imagem}" alt="Imagem da nota" loading="lazy" style="display:block;width:100%;max-height:115px;object-fit:cover;border-radius:10px;margin-top:8px">` : ''}
         </div>
     `).join('');
 }
@@ -6153,7 +6194,6 @@ window.onlineAbrirApelidoModal=function(){
   const input=document.getElementById('onlineApelido');
   const err=document.getElementById('onlineApelidoErro');
   if(!modal)return;
-  if(window.onlineProfile?.apelido || window.onlineUser?.id && localStorage.getItem('ln_apelido_definido_'+window.onlineUser.id)==='1'){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); return false; }
   if(err){err.textContent='';err.classList.remove('show');}
   modal.classList.add('show');
   modal.setAttribute('aria-hidden','false');
@@ -6197,7 +6237,6 @@ async function onlineCarregarPerfil(){
   }
   onlineProfile=data;
   window.onlineProfile=onlineProfile;
-  try{localStorage.setItem('ln_apelido_definido_'+onlineUser.id,'1')}catch(e){}
   window.onlineUser=onlineUser;
   window.sb=sb;
   onlineEmojiSelecionado=data.emoji||'🪶';
@@ -10389,17 +10428,6 @@ body.menu-inferior .status-theme{bottom:calc(68px + env(safe-area-inset-bottom))
 })();
 </script>
 
-
-<style id="ln-chat-scroll-fix">
-#onlineChat{min-height:260px;max-height:min(62vh,680px);overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable;}
-body.ln-community-fullscreen #onlineChat{max-height:none!important;}
-#lnChatToTop{position:sticky;float:right;bottom:8px;z-index:8;width:34px;height:34px;border-radius:50%;background:#f7b7c8;color:#49323b;box-shadow:0 3px 10px rgba(0,0,0,.16);display:none;align-items:center;justify-content:center;font-size:17px;margin:-44px 8px 8px 0;opacity:.95}
-#lnChatToTop.show{display:flex}
-@media(max-width:700px){#onlineChat{max-height:58vh;min-height:240px;padding-bottom:12px}body.ln-community-fullscreen #onlineChat{max-height:none}}
-</style>
-<script id="ln-chat-scroll-fix-js">
-(function(){function init(){const box=document.getElementById('onlineChat');if(!box||document.getElementById('lnChatToTop'))return;const b=document.createElement('button');b.id='lnChatToTop';b.type='button';b.title='Subir ao topo do chat';b.setAttribute('aria-label','Subir ao topo do chat');b.textContent='↑';box.insertAdjacentElement('afterend',b);b.addEventListener('click',()=>box.scrollTo({top:0,behavior:'smooth'}));const update=()=>b.classList.toggle('show',box.scrollTop>180);box.addEventListener('scroll',update,{passive:true});const mo=new MutationObserver(()=>{if(box.scrollHeight<=box.clientHeight)b.classList.remove('show')});mo.observe(box,{childList:true,subtree:true});update();}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
-</script>
 </body>
 </html>
 <script id="levenote-final-nick-profile-mentions">
@@ -10613,7 +10641,9 @@ async function faNick(){
   /* Primeiro acesso global: se o perfil já existir, atualizar somente o apelido. Isso evita profiles_pkey duplicada e preserva cargo, bilhetes, efeitos e demais dados. */
   try{
     const data=await window.lnSalvarApelidoPrimeiroAcessoSeguro(apelido);
-    window.onlineProfile=data; faEmoji=data.emoji||'🪶'; faStep=2; faRender();
+    window.onlineProfile=data;
+    try{localStorage.setItem('levenote_primeiro_acesso_ok_'+window.onlineUser.id,'1');}catch(_){}
+    faEmoji=data.emoji||'🪶'; faStep=2; faRender();
   }catch(error){
     if(err)err.textContent='⚠️ Não foi possível salvar o perfil: '+(error?.message||error);return;
   }
@@ -10735,7 +10765,15 @@ async function bootV14(){
     showCommunityEntry();
     return;
   }
-  /* onlineInicializar encontrou um usuário anônimo sem perfil. Abre o primeiro acesso global. */
+  /* Só abrir a configuração se este usuário ainda não concluiu a escolha do apelido. */
+  let jaDefiniuApelido=false;
+  try{jaDefiniuApelido=!!window.onlineUser?.id && localStorage.getItem('levenote_primeiro_acesso_ok_'+window.onlineUser.id)==='1';}catch(_){}
+  if(jaDefiniuApelido){
+    $('lnFirstAccess')?.classList.remove('show');
+    $('onlineApelidoModal')?.classList.remove('show');
+    const status=$('onlineStatus'); if(status)status.textContent='Seu apelido já está configurado. Reconectando seu perfil…';
+    return;
+  }
   faStep=1; faRender(); $('lnFirstAccess')?.classList.add('show');
 }
 
@@ -11225,7 +11263,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
         }
       }
       box.replaceChildren(frag);
-      if(nearBottom||oldTop===0)box.scrollTop=box.scrollHeight; else box.scrollTop=Math.min(oldTop,Math.max(0,box.scrollHeight-box.clientHeight));
+      if(nearBottom)box.scrollTop=box.scrollHeight; else box.scrollTop=Math.min(oldTop,Math.max(0,box.scrollHeight-box.clientHeight));
     }finally{rendering=false;}
   }
 
@@ -11367,8 +11405,15 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
         try{await window.onlineInicializar()}catch(_){}
       }
       if(!window.onlineProfile){
-        const first=$('lnFirstAccess');
-        if(first) first.classList.add('show');
+        let jaDefiniuApelido=false;
+        try{jaDefiniuApelido=!!window.onlineUser?.id && localStorage.getItem('levenote_primeiro_acesso_ok_'+window.onlineUser.id)==='1';}catch(_){}
+        if(!jaDefiniuApelido){
+          const first=$('lnFirstAccess');
+          if(first) first.classList.add('show');
+        }else{
+          $('lnFirstAccess')?.classList.remove('show');
+          $('onlineApelidoModal')?.classList.remove('show');
+        }
         return;
       }
     }
@@ -11572,3 +11617,103 @@ body.ln-community-fullscreen #administracao{display:none!important}
 
 <!-- LEVENOTE V33 - SORTEIO NO CHAT / POPUP GLOBAL -->
 <!-- LEVENOTE V34 - SORTEIO ADMINISTRÁVEL PELO POPUP DO CHAT / LANÇAMENTO COM ANIMAÇÃO -->
+
+<style id="levenote-final-chat-scroll-fix">
+  /* Chat expandido: cadeia flex com altura definida para o scroll interno funcionar. */
+  body.ln-community-fullscreen{
+    height:100vh!important;height:100dvh!important;overflow:hidden!important;
+  }
+  body.ln-community-fullscreen .app{
+    height:100vh!important;height:100dvh!important;min-height:0!important;overflow:hidden!important;
+  }
+  body.ln-community-fullscreen .main{
+    height:100vh!important;height:100dvh!important;min-height:0!important;
+    overflow:hidden!important;display:flex!important;flex-direction:column!important;
+  }
+  body.ln-community-fullscreen #comunidade.page.active{
+    display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
+    height:100%!important;min-height:0!important;overflow:hidden!important;
+  }
+  body.ln-community-fullscreen #onlineComunidade:not([hidden]){
+    display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
+    width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;
+  }
+  body.ln-community-fullscreen #onlineComunidade>.card:first-child{
+    display:flex!important;flex:1 1 auto!important;flex-direction:column!important;
+    height:100%!important;min-height:0!important;overflow:hidden!important;position:relative!important;
+  }
+  #onlineChat{
+    flex:1 1 0%!important;min-height:0!important;height:0!important;max-height:none!important;
+    overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain!important;
+    -webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;
+    scroll-behavior:auto!important;overflow-anchor:auto;
+  }
+  #onlineChat>*{flex-shrink:0}
+  #lnChatToTop{
+    display:none;position:absolute;right:12px;bottom:76px;z-index:50;
+    width:34px;height:34px;min-width:34px;padding:0;border-radius:50%;
+    align-items:center;justify-content:center;
+    background:rgba(255,255,255,.96);color:#5b4350;
+    border:1px solid rgba(190,150,170,.5);box-shadow:0 3px 12px rgba(30,20,30,.18);
+    font-size:18px;font-weight:900;line-height:1;cursor:pointer;
+  }
+  #lnChatToTop.show{display:flex}
+  body.dark #lnChatToTop{background:#303949;color:#fff;border-color:#566174}
+  body.classic #lnChatToTop{background:#1e293b;color:#fff;border-color:#475569}
+  @media(max-width:700px){
+    body.ln-community-fullscreen .main{padding:0!important;margin-left:0!important;width:100%!important}
+    body.ln-community-fullscreen #comunidade.page.active{padding:0!important}
+    body.ln-community-fullscreen #onlineComunidade>.card:first-child{padding:8px 10px calc(8px + env(safe-area-inset-bottom))!important}
+    #lnChatToTop{right:10px;bottom:72px;width:32px;height:32px;min-width:32px}
+  }
+
+/* Figurinhas de humor para notas */
+.humor-figurinhas{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:8px 0 14px}
+.humor-figurinha{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:65px;padding:7px 3px;border:1px solid #d9dfe7;border-radius:12px;background:#fff;color:#344054;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
+.humor-figurinha span{font-size:25px;line-height:1.1}.humor-figurinha small{font-size:10px;font-weight:600}
+.humor-figurinha.selected{border:2px solid #6c8df5;background:#edf2ff;transform:translateY(-1px)}
+@media(max-width:420px){.humor-figurinhas{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.humor-figurinha{min-height:58px}.humor-figurinha span{font-size:22px}.humor-figurinha small{font-size:9px}}
+</style>
+<script id="levenote-final-chat-scroll-fix-js">
+(function(){
+  'use strict';
+  function setup(){
+    const chat=document.getElementById('onlineChat');
+    if(!chat)return;
+    const card=chat.closest('#onlineComunidade>.card')||chat.parentElement;
+    if(!card)return;
+    if(getComputedStyle(card).position==='static')card.style.position='relative';
+    let button=document.getElementById('lnChatToTop');
+    if(!button){
+      button=document.createElement('button');
+      button.id='lnChatToTop';button.type='button';button.textContent='↑';
+      button.title='Voltar ao início da conversa';button.setAttribute('aria-label','Voltar ao início da conversa');
+      card.appendChild(button);
+      button.addEventListener('click',function(ev){
+        ev.preventDefault();ev.stopPropagation();
+        chat.scrollTo({top:0,behavior:'smooth'});
+      });
+    }
+    function update(){
+      const fullscreen=document.body.classList.contains('ln-community-fullscreen');
+      button.classList.toggle('show',fullscreen&&chat.scrollHeight>chat.clientHeight+80&&chat.scrollTop>30);
+    }
+    chat.addEventListener('scroll',update,{passive:true});
+    if(window.ResizeObserver){
+      const ro=new ResizeObserver(update);ro.observe(chat);
+      const contents=new MutationObserver(()=>requestAnimationFrame(update));
+      contents.observe(chat,{childList:true,subtree:true});
+    }else{
+      new MutationObserver(()=>setTimeout(update,50)).observe(chat,{childList:true,subtree:true});
+    }
+    document.addEventListener('click',()=>setTimeout(update,80),true);
+    window.addEventListener('resize',update,{passive:true});
+    const observer=new MutationObserver(update);
+    observer.observe(document.body,{attributes:true,attributeFilter:['class']});
+    setTimeout(update,250);setTimeout(update,900);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});
+  else setup();
+})();
+</script>
+
