@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8e8ee">
+  <title>Meu Jardim Criativo</title>
+  <style>
+    :root {
+      --ink: #514354;
+      --muted: #887789;
+      --pink: #d982a4;
+      --purple: #9282bd;
+      --cream: #fffaf6;
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      padding: max(22px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(ellipse at 8% 12%, rgba(255,255,255,.85) 0 7%, transparent 28%),
+        radial-gradient(ellipse at 92% 18%, rgba(255,255,255,.65) 0 6%, transparent 25%),
+        radial-gradient(ellipse at 15% 90%, rgba(255,225,231,.85), transparent 32%),
+        radial-gradient(ellipse at 88% 88%, rgba(224,219,247,.8), transparent 34%),
+        linear-gradient(135deg, #f9e9ed, #f5effb 52%, #f8eee2);
+      position: relative;
+      isolation: isolate;
+    }
+    /* Ilustração floral leve em SVG, embutida no próprio arquivo. */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: -25px;
+      z-index: -1;
+      pointer-events: none;
+      background-repeat: no-repeat;
+      opacity: .62;
+    }
+    body::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='430' height='520' viewBox='0 0 430 520'%3E%3Cg fill='none' stroke='%23b88da9' stroke-width='2' opacity='.62'%3E%3Cpath d='M-15 330 Q85 250 95 125 Q105 65 150 25 M35 286 Q95 275 132 220 M77 204 Q35 170 28 126 M93 147 Q155 145 177 100'/%3E%3Cpath d='M300 540 Q275 410 350 300 Q390 240 420 210 M330 410 Q270 390 245 330 M365 340 Q415 325 440 280'/%3E%3C/g%3E%3Cg fill='%23e7a9bf' opacity='.72'%3E%3Cellipse cx='28' cy='120' rx='10' ry='23' transform='rotate(-35 28 120)'/%3E%3Cellipse cx='48' cy='104' rx='10' ry='23' transform='rotate(30 48 104)'/%3E%3Cellipse cx='38' cy='83' rx='10' ry='23'/%3E%3Cellipse cx='17' cy='95' rx='10' ry='23' transform='rotate(-65 17 95)'/%3E%3Cellipse cx='58' cy='130' rx='10' ry='23' transform='rotate(65 58 130)'/%3E%3C/g%3E%3Ccircle cx='38' cy='105' r='9' fill='%23e8c77e'/%3E%3Cg fill='%23c8b8df' opacity='.76'%3E%3Cellipse cx='365' cy='285' rx='11' ry='24'/%3E%3Cellipse cx='389' cy='300' rx='11' ry='24' transform='rotate(65 389 300)'/%3E%3Cellipse cx='380' cy='326' rx='11' ry='24'/%3E%3Cellipse cx='350' cy='318' rx='11' ry='24' transform='rotate(-65 350 318)'/%3E%3Cellipse cx='347' cy='288' rx='11' ry='24' transform='rotate(-35 347 288)'/%3E%3C/g%3E%3Ccircle cx='370' cy='305' r='9' fill='%23e8c77e'/%3E%3Cg fill='%2399b99c' opacity='.65'%3E%3Cellipse cx='112' cy='246' rx='10' ry='27' transform='rotate(58 112 246)'/%3E%3Cellipse cx='287' cy='390' rx='10' ry='28' transform='rotate(-55 287 390)'/%3E%3Cellipse cx='385' cy='375' rx='9' ry='24' transform='rotate(52 385 375)'/%3E%3C/g%3E%3C/svg%3E");
+      background-position: left top, right bottom;
+      background-size: min(58vw, 430px) auto;
+    }
+    body::after {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='420' viewBox='0 0 360 420'%3E%3Cg opacity='.52'%3E%3Cpath d='M280 0 Q210 80 250 165 T330 310' fill='none' stroke='%23a9a0c7' stroke-width='2'/%3E%3Cellipse cx='239' cy='105' rx='9' ry='23' fill='%23e8b5c6' transform='rotate(-45 239 105)'/%3E%3Cellipse cx='263' cy='91' rx='9' ry='23' fill='%23e8b5c6' transform='rotate(35 263 91)'/%3E%3Cellipse cx='270' cy='119' rx='9' ry='23' fill='%23e8b5c6'/%3E%3Cellipse cx='242' cy='132' rx='9' ry='23' fill='%23e8b5c6' transform='rotate(55 242 132)'/%3E%3Ccircle cx='253' cy='114' r='8' fill='%23e8c77e'/%3E%3C/g%3E%3C/svg%3E");
+      background-position: right top;
+      background-size: min(48vw, 360px) auto;
+      opacity: .45;
+    }
+    main { width: min(100%, 850px); margin: auto; }
+    .panel {
+      position: relative;
+      padding: clamp(28px, 6vw, 58px);
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: 36px;
+      background: rgba(255, 251, 249, .79);
+      box-shadow: 0 25px 80px rgba(105, 75, 105, .13), inset 0 1px 0 #fff;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      overflow: hidden;
+    }
+    .panel::before {
+      content: "✿";
+      position: absolute;
+      right: 25px;
+      top: 8px;
+      color: rgba(207, 151, 178, .22);
+      font-size: clamp(80px, 15vw, 150px);
+      line-height: 1;
+      transform: rotate(18deg);
+      pointer-events: none;
+    }
+    header { position: relative; text-align: center; margin: 0 auto 34px; }
+    .brand {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 999px;
+      color: #98718c; background: #f8eaf0;
+      font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase;
+    }
+    h1 {
+      margin: 20px 0 12px;
+      color: #624f68;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(37px, 8vw, 65px);
+      line-height: .99;
+      font-weight: 500;
+      letter-spacing: -.045em;
+    }
+    .subtitle {
+      max-width: 480px; margin: auto;
+      color: var(--muted); font-size: clamp(14px, 2.4vw, 17px); line-height: 1.65;
+    }
+    .divider {
+      display: flex; align-items: center; gap: 13px;
+      width: min(270px, 75%); margin: 23px auto 0;
+      color: #d49ab1; font-size: 17px;
+    }
+    .divider::before, .divider::after { content: ""; height: 1px; flex: 1; background: #ead8e1; }
+    .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 19px; position: relative; }
+    .choice {
+      min-height: 300px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      padding: 28px 24px 24px;
+      border-radius: 27px;
+      text-decoration: none; color: inherit;
+      border: 1px solid rgba(255,255,255,.95);
+      box-shadow: 0 12px 30px rgba(94, 72, 101, .09), inset 0 1px 0 rgba(255,255,255,.9);
+      transition: transform .2s ease, box-shadow .2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .choice:active { transform: scale(.98); }
+    @media (hover:hover) {
+      .choice:hover { transform: translateY(-5px); box-shadow: 0 19px 38px rgba(94,72,101,.15); }
+    }
+    .levenote { background: linear-gradient(155deg, #f2edff, #e8e3f7 100%); }
+    .scrapbook { background: linear-gradient(155deg, #fff0e9, #f8e1e3 100%); }
+    .illustration {
+      width: 94px; height: 94px; display: grid; place-items: center;
+      border-radius: 29px; margin-bottom: 20px;
+      background: rgba(255,255,255,.66);
+      box-shadow: 0 8px 20px rgba(104,79,110,.09);
+      font-size: 48px;
+    }
+    .choice h2 {
+      margin: 0 0 10px; color: #5c4a65;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(25px, 4vw, 31px); font-weight: 600;
+    }
+    .choice p { max-width: 250px; margin: 0; color: #817286; font-size: 14px; line-height: 1.6; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      margin-top: auto; padding: 13px 20px; min-height: 46px;
+      border-radius: 999px; color: white; font-size: 13px; font-weight: 800;
+      letter-spacing: .02em;
+      box-shadow: 0 7px 15px rgba(91,69,105,.13);
+    }
+    .levenote .button { background: #9482bc; }
+    .scrapbook .button { background: #d58ca2; }
+    footer { margin-top: 28px; text-align: center; color: #a18d9f; font-size: 12px; letter-spacing: .04em; }
+    footer span { color: #d58ca2; }
+    @media (max-width: 600px) {
+      body { padding-left: 13px; padding-right: 13px; align-items: stretch; }
+      main { display: flex; align-items: center; }
+      .panel { width: 100%; padding: 31px 18px 25px; border-radius: 29px; }
+      header { margin-bottom: 25px; }
+      h1 { font-size: clamp(38px, 11vw, 54px); margin-top: 17px; }
+      .subtitle { max-width: 310px; font-size: 14px; }
+      .choices { grid-template-columns: 1fr; gap: 13px; }
+      .choice {
+        min-height: 0; padding: 17px 17px;
+        display: grid; grid-template-columns: 76px 1fr; grid-template-rows: auto auto auto;
+        column-gap: 15px; text-align: left; justify-items: start;
+        border-radius: 22px;
+      }
+      .illustration { width: 72px; height: 72px; border-radius: 23px; font-size: 38px; margin: 0; grid-row: 1 / 4; align-self: center; }
+      .choice h2 { font-size: 25px; margin: 1px 0 4px; }
+      .choice p { max-width: none; font-size: 12.5px; line-height: 1.45; }
+      .button { min-height: 38px; padding: 9px 15px; margin-top: 11px; font-size: 12px; }
+      footer { margin-top: 19px; }
+      .panel::before { right: 12px; top: 2px; }
+    }
+    @media (max-width: 360px) {
+      .panel { padding-left: 14px; padding-right: 14px; }
+      .choice { grid-template-columns: 62px 1fr; column-gap: 12px; padding: 15px 12px; }
+      .illustration { width: 60px; height: 60px; font-size: 32px; border-radius: 19px; }
+      .choice h2 { font-size: 22px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="panel">
+      <header>
+        <div class="brand">✿ Bem-vinda ao seu cantinho ✿</div>
+        <h1>Seu jardim<br>de ideias</h1>
+        <p class="subtitle">Um lugar delicado para organizar seus pensamentos, guardar lembranças e soltar a criatividade.</p>
+        <div class="divider" aria-hidden="true">❀</div>
+      </header>
+
+      <section class="choices" aria-label="Escolha seu aplicativo">
+        <a class="choice levenote" href="./Levenote.html">
+          <span class="illustration" aria-hidden="true">📒</span>
+          <h2>Levenote</h2>
+          <p>Organize suas ideias, anotações e planos em um só lugar.</p>
+          <span class="button">Entrar no Levenote <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="choice scrapbook" href="./Scrapbook.html">
+          <span class="illustration" aria-hidden="true">🌷</span>
+          <h2>Scrapbook</h2>
+          <p>Crie páginas especiais com fotos, adesivos, cores e memórias.</p>
+          <span class="button">Entrar no Scrapbook <span aria-hidden="true">→</span></span>
+        </a>
+      </section>
+
+      <footer>feito com carinho <span>♥</span> para suas ideias florescerem</footer>
+    </div>
+  </main>
+</body>
+</html>
