@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scrapbook</title>
+<style>
+:root{--ink:#51463f;--muted:#8b7c70;--pink:#e9b9c2;--rose:#b86f80;--cream:#fffaf0;--paper:#fffdf8;--line:#e9d8cf;--sage:#c9d7c3;--lav:#ddd4eb;--shadow:0 12px 35px #69544818}
+*{box-sizing:border-box}body{margin:0;background:#f6eee8;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select{font:inherit}button{border:0;border-radius:12px;padding:9px 12px;background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 2px 8px #57463a12;transition:.18s}button:hover{transform:translateY(-1px);background:#fff5f2}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #d99baa}
+.primary{background:var(--rose);color:white}.primary:hover{background:#a85f70}.soft{background:#f8e9e9}.danger{color:#a34c54;background:#fff0ef}.app{max-width:1440px;margin:auto;padding:22px}
+header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#e8b9c3,#d8cce8);display:grid;place-items:center;font-size:25px}.brand h1{font-family:Georgia,serif;font-size:clamp(20px,3vw,29px);margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px;letter-spacing:.08em}.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.panel{background:#fffdfb;border:1px solid #eee2dc;border-radius:20px;box-shadow:var(--shadow)}
+.library{padding:24px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.section-title h2{font: bold 23px Georgia,serif;margin:0}.books{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:16px}.book-card{padding:14px;border:1px solid #eee2dc;border-radius:16px;background:#fff;cursor:pointer;min-height:210px;display:flex;flex-direction:column;justify-content:space-between}.book-cover{height:125px;border-radius:12px;display:grid;place-items:center;font-size:42px;background:linear-gradient(145deg,#f6dfe2,#e9e1f2);margin-bottom:12px}.book-card h3{margin:0;font:19px Georgia,serif}.book-card small{color:var(--muted)}.book-actions{display:flex;gap:6px;margin-top:10px}.book-actions button{font-size:12px;padding:6px 9px}
+.editor{display:none}.toolbar{padding:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}.toolbar .divider{width:1px;height:28px;background:#eaded7;margin:0 3px}.toolbar label{font-size:12px;color:var(--muted)}.toolbar select{border:1px solid #eaded7;border-radius:10px;padding:8px;background:white;color:var(--ink)}.color-dot{width:22px;height:22px;border-radius:50%;padding:0;border:2px solid white;outline:1px solid #ddd}
+.workspace{display:grid;grid-template-columns:220px minmax(0,1fr);gap:15px}.side{padding:14px;height:max-content}.side h3{font:17px Georgia,serif;margin:4px 0 12px}.thumbs{display:flex;flex-direction:column;gap:8px}.thumb{padding:10px;text-align:left;border:1px solid #eee2dc;background:#fff;border-radius:11px;font-size:13px}.thumb.active{border-color:var(--rose);background:#fff3f4}.side-tools{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:14px}.side-tools button{font-size:12px}
+.stage{padding:18px;min-height:660px;background:#f1e8e2;border-radius:20px;display:flex;flex-direction:column;align-items:center}.stage-top{width:min(100%,850px);display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;color:var(--muted);font-size:12px}.paper{width:min(100%,850px);min-height:590px;padding:58px 66px;position:relative;overflow:hidden;background-color:var(--paper);box-shadow:0 8px 25px #57463a20;border-radius:4px;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,#e8dfe0 32px);background-position:0 26px}.paper.kind-kin{background:var(--cream);background-image:none;padding:70px 82px}.paper.kind-kin .editable{font-family:Georgia,serif;line-height:1.85;color:#403b34}.editable{min-height:460px;outline:none;white-space:pre-wrap;overflow-wrap:anywhere;font-size:18px;line-height:1.8;position:relative;z-index:2}.editable:empty:before{content:"Comece a escrever sua memória...";color:#b9aaa2}.editable img{max-width:min(100%,360px);height:auto;border-radius:9px;margin:10px;box-shadow:0 5px 15px #0002}.editable .sticker{display:inline-block;font-size:38px;line-height:1;vertical-align:middle;margin:5px;cursor:default}.editable .stamp{display:inline-block;border:2px dashed #bd8290;color:#ad6c7b;padding:6px 12px;border-radius:8px;transform:rotate(-5deg);font:bold 14px Georgia;margin:8px}.page-foot{width:min(100%,850px);display:flex;justify-content:space-between;margin-top:12px;color:var(--muted);font-size:12px}
+.palette{display:flex;gap:7px;align-items:center}.hint{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.5}.hidden{display:none!important}
+@media(max-width:760px){.app{padding:12px}.workspace{grid-template-columns:1fr}.side{order:2}.thumbs{display:grid;grid-template-columns:repeat(3,1fr)}.paper{padding:35px 24px;min-height:540px}.paper.kind-kin{padding:40px 27px}.stage{padding:10px;min-height:0}.editable{font-size:16px}.header-actions{justify-content:flex-end}.brand p{display:none}}
+@media print{body{background:white}.app>header,.library,.toolbar,.side,.stage-top,.page-foot,.no-print{display:none!important}.editor{display:block!important}.workspace{display:block}.stage{padding:0;background:white}.paper{box-shadow:none;width:100%;min-height:0;page-break-after:always;border:0}.editable{min-height:0}}
+
+/* Extensões funcionais: catálogo ilustrado, calendário e papel Kindle texturizado. */
+.toolbar>div:has(>#stickerPalette){position:static!important}.sticker-palette{display:none;position:fixed;top:112px;left:50%;transform:translateX(-50%);z-index:100;background:#fffdfb;border:1px solid #eadbd4;border-radius:15px;padding:12px;width:min(390px,calc(100vw - 35px));box-shadow:0 12px 30px #57463a25;max-height:390px;overflow:auto}
+.sticker-palette.active{display:block}.sticker-size-controls{display:flex;align-items:center;gap:7px;margin-bottom:10px;font-size:12px;color:var(--muted)}.sticker-size-btn{padding:5px 9px;border:1px solid #eadbd4}.sticker-size-btn.active{background:#b86f80;color:#fff}.sticker-palette-close{margin-left:auto;background:#fff0ef}.sticker-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}.sticker-option{padding:5px;border:1px solid #f0e5df;border-radius:10px;background:#fff;aspect-ratio:1;display:grid;place-items:center}.sticker-option img{width:100%;height:100%;object-fit:contain}.stamp-palette{display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:100;background:#fffdfb;border:1px solid #eadbd4;border-radius:14px;padding:9px;width:190px;box-shadow:0 12px 30px #57463a25}.stamp-palette.active{display:grid;gap:6px}.stamp-option{padding:9px;border-radius:8px;background:#fff7f3;border:1px dashed #d7b5b3;cursor:pointer;font-size:12px;text-align:center}.stamp-option:hover{background:#f8e9e9}
+#calendarPanel{margin-top:22px;padding:18px;border:1px solid #eee2dc;border-radius:16px;background:#fffaf7}.calendar-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.calendar-head h3{font:20px Georgia,serif;margin:0}.calendar-nav{width:32px;height:32px;border-radius:50%;background:#f8e9e9}.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center}.calendar-weekday{font-size:11px;color:var(--muted);padding:5px}.calendar-day{padding:8px 2px;border-radius:10px;background:transparent;box-shadow:none;font-size:13px;position:relative}.calendar-day:hover{background:#f7e9e7}.calendar-day.today{outline:1px solid #c58a9a}.calendar-day.selected{background:#b86f80;color:white}.calendar-day.empty{pointer-events:none}.calendar-event-dot{display:block;width:5px;height:5px;border-radius:50%;margin:2px auto 0;background:var(--dot-color)}.calendar-selected{font-size:12px;color:var(--muted);text-align:center;margin:10px 0}.calendar-events-panel{border-top:1px solid #eee2dc;margin-top:12px;padding-top:10px}.calendar-events-panel h4{font:16px Georgia,serif;margin:0 0 8px}.calendar-events-list{display:grid;gap:6px}.calendar-event-item{display:flex;align-items:center;gap:8px;padding:8px;border:1px solid #eee2dc;border-radius:9px;background:white;text-align:left;font-size:12px}.calendar-event-item i{width:9px;height:9px;border-radius:50%;background:var(--dot-color);flex:none}.calendar-event-item span{flex:1}.calendar-empty{font-size:12px;color:var(--muted);text-align:center;padding:8px}.event-modal-backdrop{display:none;position:fixed;inset:0;background:#3c302f88;z-index:3000;align-items:center;justify-content:center;padding:16px}.event-modal-backdrop.active{display:flex}.event-modal-card{width:min(430px,100%);background:#fffaf5;border-radius:18px;padding:24px;box-shadow:0 15px 45px #0003;position:relative}.event-modal-card h2{font:24px Georgia,serif;margin:0 0 14px}.event-modal-card label{display:block;font-size:12px;margin:10px 0 5px}.event-modal-card input{width:100%;padding:10px;border:1px solid #e5d5cc;border-radius:9px;background:white}.event-fields-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.event-color-options{display:flex;gap:10px;margin:10px 0}.event-color-options button{width:25px;height:25px;border-radius:50%;padding:0;border:2px solid white;outline:1px solid #ddd;background:var(--event-color)}.event-color-options button.selected{outline:2px solid #80606a}.event-modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}.event-modal-actions .event-delete-btn{margin-right:auto;background:#fff0ef;color:#a34c54}.paper.kind-kindle{background-color:#f5edda;background-image:radial-gradient(rgba(130,104,73,.09) .55px,transparent .75px),linear-gradient(90deg,rgba(255,255,255,.35),transparent 20%,rgba(160,130,95,.035) 100%);background-size:5px 5px,100% 100%;box-shadow:0 8px 25px #57463a20,inset 0 0 35px rgba(154,123,80,.07)}.paper.kind-kindle .editable{font-family:Georgia,'Times New Roman',serif;color:#40392f;line-height:1.9;letter-spacing:.01em}.paper.kind-kindle:after{content:' ';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(145,117,81,.09)}
+body[data-theme="dark"]{background:#211e1b;color:#e9ded3}body[data-theme="dark"] .panel,body[data-theme="dark"] .book-card,body[data-theme="dark"] .toolbar,body[data-theme="dark"] .side{background:#302a26;border-color:#51443b;color:#e9ded3}body[data-theme="dark"] .book-card small,body[data-theme="dark"] .hint{color:#c3b2a5}body[data-theme="dark"] button{background:#493d36;color:#f5e9de}body[data-theme="dark"] .primary{background:#a96b7a;color:white}body[data-theme="dark"] #calendarPanel{background:#302a26;border-color:#51443b}body[data-theme="dark"] .calendar-day{color:#e9ded3}body[data-theme="dark"] .calendar-day:hover{background:#51443b}body[data-theme="dark"] .calendar-event-item{background:#3a322d;color:#f1e5da;border-color:#55483f}body[data-theme="dark"] .sticker-palette,body[data-theme="dark"] .stamp-palette{background:#302a26;border-color:#51443b}body[data-theme="dark"] .sticker-option{background:#403730;border-color:#574a41}body[data-theme="dark"] .stamp-option{background:#403730;color:#f1e5da}
+@media(max-width:760px){.sticker-palette{left:50%;top:70px;transform:translateX(-50%)}.sticker-grid{grid-template-columns:repeat(5,1fr)}.event-fields-row{grid-template-columns:1fr}}
+
+
+/* Ajustes de layout e edição */
+.library-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:20px;align-items:start}
+.books{grid-template-columns:repeat(3,minmax(0,1fr));align-content:start}
+#calendarPanel{margin-top:0;position:sticky;top:16px}
+.book-cover{position:relative;cursor:pointer;overflow:hidden}
+.book-cover img{width:100%;height:100%;object-fit:cover}
+
+.sticker-item{display:inline-flex;position:relative;vertical-align:middle;align-items:center;justify-content:center;margin:5px;cursor:move;user-select:none}
+.sticker-item img{display:block!important;margin:0!important;max-width:none!important;box-shadow:none!important;pointer-events:none}
+.sticker-item.selected-sticker{outline:2px dashed #b86f80;border-radius:8px}
+.sticker-item .sticker-remove{display:none;position:absolute;right:-9px;top:-9px;border-radius:50%;width:22px;height:22px;padding:0;background:#a94e5c;color:#fff;font-size:14px;line-height:22px;z-index:5;box-shadow:0 2px 7px #0003}
+.sticker-item.selected-sticker .sticker-remove{display:block}
+body[data-theme="dark"]{background:#111;color:#f4f0ed}
+body[data-theme="dark"] .panel,body[data-theme="dark"] .book-card,body[data-theme="dark"] .toolbar,body[data-theme="dark"] .side{background:#202020;border-color:#3a3a3a;color:#f4f0ed}
+body[data-theme="dark"] .stage{background:#171717}
+body[data-theme="dark"] .paper,body[data-theme="dark"] .paper.kind-kindle,body[data-theme="dark"] .paper.kind-kin{background:#000!important;background-image:none!important;background-size:auto!important;color:#f3f0f5!important;box-shadow:0 8px 25px #0009!important}
+body[data-theme="dark"] .editable,body[data-theme="dark"] .paper:after{display:none!important}
+body[data-theme="dark"] .paper .editable,body[data-theme="dark"] .paper.kind-kindle .editable,body[data-theme="dark"] .paper.kind-kin .editable{color:#fff!important}
+body[data-theme="dark"] .editable:empty:before{color:#f0dfcf}
+body[data-theme="dark"] .toolbar select,body[data-theme="dark"] input{background:#292929;color:#fff;border-color:#555}
+body[data-theme="dark"] #calendarPanel{background:#202020}body[data-theme="dark"] .event-modal-card{background:#202020;color:#f4f0ed;border:1px solid #444}body[data-theme="dark"] .event-modal-card input{background:#111;color:#fff;border-color:#555}
+@media(max-width:950px){.library-layout{grid-template-columns:1fr}.books{grid-template-columns:repeat(3,minmax(0,1fr))}#calendarPanel{position:static}}
+@media(max-width:620px){.books{grid-template-columns:repeat(2,minmax(0,1fr))}.library-layout{gap:14px}}
+
+
+/* Tema escuro: papel com textura de couro castanho e texto branco de alto contraste. */
+body[data-theme="dark"] .paper .editable,
+body[data-theme="dark"] .paper.kind-kindle .editable,
+body[data-theme="dark"] .paper.kind-kin .editable{color:#fff!important}
+body[data-theme="dark"] .paper .editable a{color:#ffe0b8}
+body[data-theme="dark"] .paper .editable ::selection{background:#806477;color:#fff}
+\n
+/* Capas neon e controles da barra sempre legíveis, inclusive ao focar/clicar. */
+.book-cover img{filter:saturate(1.28) contrast(1.04);transition:transform .25s,filter .25s;}
+.book-card:hover .book-cover img{transform:scale(1.035);filter:saturate(1.45) contrast(1.08) drop-shadow(0 0 8px #d946ef66);}
+.book-cover{box-shadow:0 0 0 1px #ffffff55,0 5px 18px #8b5cf633;}
+.toolbar button:not(.color-dot){background:linear-gradient(135deg,#fdf0ff,#e9e7ff);color:#38244d;border:1px solid #d8c4f4;font-weight:600;}
+.toolbar button:not(.color-dot):hover,.toolbar button:not(.color-dot):focus,.toolbar button:not(.color-dot):active{background:linear-gradient(135deg,#ffd6f5,#d9d4ff);color:#241038;outline:2px solid #c084fc;outline-offset:1px;}
+.toolbar .color-dot{flex:0 0 24px;width:24px;height:24px;min-width:24px;border:2px solid #fff;box-shadow:0 0 0 1px #7c6b91,0 0 9px #c084fc66;}
+.toolbar .color-dot:hover,.toolbar .color-dot:focus-visible{transform:scale(1.18);outline:3px solid #c084fc;outline-offset:2px;}
+.toolbar label{color:#59446b;font-weight:700;}
+body[data-theme="dark"] .toolbar button:not(.color-dot){background:linear-gradient(135deg,#44265b,#283b67);color:#fff!important;border-color:#9b70d4;box-shadow:0 0 10px #a855f744;}
+body[data-theme="dark"] .toolbar button:not(.color-dot):hover,body[data-theme="dark"] .toolbar button:not(.color-dot):focus,body[data-theme="dark"] .toolbar button:not(.color-dot):active{background:linear-gradient(135deg,#713b85,#315a91);color:#fff!important;outline:2px solid #e879f9;outline-offset:1px;}
+body[data-theme="dark"] .toolbar label{color:#f0d8ff!important;}
+body[data-theme="dark"] .toolbar .divider{background:#82649b;}
+body[data-theme="dark"] .toolbar .color-dot{border-color:#fff;box-shadow:0 0 0 1px #e9d5ff,0 0 11px #e879f9aa;}
+body[data-theme="dark"] .toolbar select{background:#29213a;color:#fff;border-color:#a78bca;}
+
+
+/* Tema escuro: navegação das páginas com contraste claro e papel totalmente preto. */
+body[data-theme="dark"] .thumb{background:#292929!important;color:#f0edf3!important;border-color:#51465a!important;}
+body[data-theme="dark"] .thumb:hover{background:#39313f!important;color:#fff!important;}
+body[data-theme="dark"] .thumb.active,
+body[data-theme="dark"] .thumb.active:hover,
+body[data-theme="dark"] .thumb.active:focus,
+body[data-theme="dark"] .thumb.active:active{background:#fff!important;color:#17121b!important;border-color:#fff!important;font-weight:700!important;box-shadow:0 0 0 2px #d8b4ff,0 3px 12px #0006!important;}
+body[data-theme="dark"] .paper .editable,
+body[data-theme="dark"] .paper.kind-kindle .editable,
+body[data-theme="dark"] .paper.kind-kin .editable{color:#f3f0f5!important;}
+body[data-theme="dark"] .paper .editable:empty:before{color:#aaa2b2!important;}
+/* Correção do editor no tema escuro: manter o conteúdo visível sobre o papel preto. */
+body[data-theme="dark"] #content{display:block!important;color:#f6efdf!important;-webkit-text-fill-color:#f6efdf!important;}
+body[data-theme="dark"] #content *:not(img):not(svg):not(path){color:#f6efdf!important;-webkit-text-fill-color:#f6efdf!important;}
+body[data-theme="dark"] #content .sticker-item,
+body[data-theme="dark"] #content .sticker-item *{color:inherit!important;-webkit-text-fill-color:initial!important;}
+/* Marca-texto neon no tema escuro. */
+body[data-theme="dark"] .color-dot[data-color="#fff19a"]{background:#d9ff00!important;box-shadow:0 0 0 1px #fff,0 0 13px #d9ff00!important;}
+body[data-theme="dark"] .color-dot[data-color="#c9edcf"]{background:#00f5a0!important;box-shadow:0 0 0 1px #fff,0 0 13px #00f5a0!important;}
+body[data-theme="dark"] .color-dot[data-color="#f6c9dc"]{background:#ff3bd4!important;box-shadow:0 0 0 1px #fff,0 0 13px #ff3bd4!important;}
+body[data-theme="dark"] .color-dot[data-color="#cdddf8"]{background:#00d9ff!important;box-shadow:0 0 0 1px #fff,0 0 13px #00d9ff!important;}
+/* Marca-texto usa a mesma paleta neon nos temas claro e escuro. */
+.color-dot[data-color="#fff19a"]{background:#d9ff00!important;box-shadow:0 0 0 1px #fff,0 0 13px #d9ff00!important;}
+.color-dot[data-color="#c9edcf"]{background:#00f5a0!important;box-shadow:0 0 0 1px #fff,0 0 13px #00f5a0!important;}
+.color-dot[data-color="#f6c9dc"]{background:#ff3bd4!important;box-shadow:0 0 0 1px #fff,0 0 13px #ff3bd4!important;}
+.color-dot[data-color="#cdddf8"]{background:#00d9ff!important;box-shadow:0 0 0 1px #fff,0 0 13px #00d9ff!important;}
+/* No tema escuro, o texto efetivamente destacado fica preto sobre o neon. */
+body[data-theme="dark"] #content span[style*="background-color"],
+body[data-theme="dark"] #content font[style*="background-color"]{color:#111!important;-webkit-text-fill-color:#111!important;}
+
+
+/* Ajuste final: escrita alinhada às pautas do caderno. */
+.paper.kind-lined{background-position:0 50px;}
+.paper.kind-lined .editable{line-height:32px;}
+@media(max-width:760px){.paper.kind-lined{background-position:0 27px;}}
+/* No tema escuro, o texto grifado permanece preto sobre qualquer marca-texto. */
+body[data-theme="dark"] #content span[style*="background-color"],
+body[data-theme="dark"] #content font[style*="background-color"],
+body[data-theme="dark"] #content mark,
+body[data-theme="dark"] #content mark *{color:#111!important;-webkit-text-fill-color:#111!important;}
+
+
+/* Impressão/PDF: preservar a grifagem e as cores exatas do marca-texto. */
+@media print{
+  html,body,.app,.editor,.workspace,.stage,.paper,.editable{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+  #content span[style*="background"],
+  #content font[style*="background"],
+  #content mark{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+    background-color:inherit!important;
+    background-image:none!important;
+  }
+  #content mark{background-color:#d9ff00!important;color:#111!important;}
+  body[data-theme="dark"] #content span[style*="background"],
+  body[data-theme="dark"] #content font[style*="background"],
+  body[data-theme="dark"] #content mark,
+  body[data-theme="dark"] #content mark *{
+    color:#111!important;
+    -webkit-text-fill-color:#111!important;
+  }
+}
+
+.selection-tools{display:none;position:fixed;z-index:9999;align-items:center;gap:6px;padding:8px 10px;border-radius:13px;background:#fff;border:1px solid #d9c5ef;box-shadow:0 8px 28px #24103835;transform:translate(-50%,-100%)}
+.selection-tools.active{display:flex}.selection-tools button:not(.color-dot){border:1px solid #d8c4f4;border-radius:8px;padding:6px 10px;background:linear-gradient(135deg,#fdf0ff,#e9e7ff);color:#38244d;font-weight:700}.selection-tools .selection-colors{display:flex;gap:7px;padding-left:5px;border-left:1px solid #ddd}.selection-tools .color-dot{width:21px;height:21px;min-width:21px;padding:0;border-radius:50%;border:2px solid white;box-shadow:0 0 0 1px #7c6b91,0 0 8px #c084fc}.selection-tools .color-dot[data-color="#fff19a"]{background:#d9ff00!important}.selection-tools .color-dot[data-color="#c9edcf"]{background:#00f5a0!important}.selection-tools .color-dot[data-color="#f6c9dc"]{background:#ff3bd4!important}.selection-tools .color-dot[data-color="#cdddf8"]{background:#00d9ff!important}
+body[data-theme="dark"] .selection-tools{background:#202020;border-color:#a855f7;box-shadow:0 8px 28px #0009}body[data-theme="dark"] .selection-tools button:not(.color-dot){background:linear-gradient(135deg,#44265b,#283b67);color:#fff;border-color:#9b70d4}
+.toolbar #stickerBtn{background:linear-gradient(135deg,#fff2a8,#ffe16b);color:#594000;border-color:#e8c84e}.toolbar #stampBtn{background:linear-gradient(135deg,#d9ffe8,#7ee6a7);color:#07552d;border-color:#49bd79}.toolbar #photoBtn{background:linear-gradient(135deg,#ffe0f1,#ff9acb);color:#7d174d;border-color:#ed75b3}.toolbar #addPage{background:linear-gradient(135deg,#dcecff,#86baff);color:#123d79;border-color:#6099e8}
+body[data-theme="dark"] .toolbar #stickerBtn{background:linear-gradient(135deg,#80651a,#c49b25);color:#fff8d6;border-color:#f5d45e}body[data-theme="dark"] .toolbar #stampBtn{background:linear-gradient(135deg,#145b39,#26965e);color:#eafff1;border-color:#65e39c}body[data-theme="dark"] .toolbar #photoBtn{background:linear-gradient(135deg,#812b5b,#c84d91);color:#fff0f8;border-color:#ff8bc8}body[data-theme="dark"] .toolbar #addPage{background:linear-gradient(135deg,#204c88,#347bd0);color:#eef6ff;border-color:#80baff}
+
+
+/* Biblioteca: lixeira, diálogos e lembretes */
+.header-actions{align-items:center}
+.icon-trash{width:40px;height:40px;padding:0;font-size:19px;display:grid;place-items:center;background:#fff0ef;color:#a34c54;border:1px solid #f0d1cf}
+.book-actions{flex-wrap:wrap}
+.book-actions button{flex:1}
+.book-actions .book-trash{background:#fff0ef;color:#a34c54}
+.modal-backdrop{display:none;position:fixed;inset:0;background:#30252288;z-index:4000;align-items:center;justify-content:center;padding:16px}
+.modal-backdrop.active{display:flex}
+.app-modal{width:min(480px,100%);max-height:min(80vh,680px);overflow:auto;background:#fffaf5;color:var(--ink);border:1px solid #eadbd4;border-radius:18px;padding:22px;box-shadow:0 15px 45px #0003}
+.app-modal h2{font:24px Georgia,serif;margin:0 0 14px}
+.app-modal label{display:block;font-size:13px;margin:8px 0 5px}
+.app-modal input{width:100%;padding:11px;border:1px solid #e5d5cc;border-radius:9px;background:white;color:#51463f}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.trash-list{display:grid;gap:9px}
+.trash-empty{color:var(--muted);font-size:13px;text-align:center;padding:20px 8px}
+.trash-item{display:flex;align-items:center;gap:8px;border:1px solid #eee2dc;border-radius:12px;padding:10px;background:#fff}
+.trash-item .trash-name{flex:1;min-width:0}
+.trash-item strong{display:block;font:16px Georgia,serif;overflow-wrap:anywhere}
+.trash-item small{color:var(--muted)}
+.trash-item button{font-size:12px;padding:7px 9px}
+.trash-item .permanent-delete{background:#fff0ef;color:#a34c54}
+body[data-theme="dark"] .app-modal{background:#202020;color:#f4f0ed;border-color:#444}
+body[data-theme="dark"] .app-modal input{background:#111;color:#fff;border-color:#555}
+body[data-theme="dark"] .trash-item{background:#292929;border-color:#51465a;color:#f4f0ed}
+body[data-theme="dark"] .trash-item small{color:#c3b2a5}
+@media(max-width:560px){.trash-item{flex-wrap:wrap}.trash-item .trash-name{flex-basis:100%}.header-actions{gap:5px}.icon-trash{width:36px;height:36px}}
+
+
+
+/* =========================================================
+   EXPERIÊNCIA MOBILE — camada responsiva sem remover recursos
+   ========================================================= */
+:root { color-scheme: light; }
+html { -webkit-text-size-adjust: 100%; }
+body { min-width: 320px; }
+button, select, input { touch-action: manipulation; }
+button { -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+
+@media (max-width: 760px) {
+  body { padding-bottom: env(safe-area-inset-bottom); }
+  .app {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 10px calc(18px + env(safe-area-inset-bottom));
+  }
+
+  header {
+    position: relative;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+    flex-wrap: wrap;
+  }
+  .brand { gap: 8px; min-width: 0; }
+  .logo { width: 42px; height: 42px; flex: 0 0 42px; border-radius: 14px; }
+  .brand h1 { font-size: 22px; }
+  .header-actions {
+    display: flex;
+    flex: 1 1 100%;
+    justify-content: space-between;
+    gap: 7px;
+  }
+  .header-actions button {
+    min-height: 42px;
+    padding: 9px 11px;
+    flex: 1 1 auto;
+  }
+  .header-actions .icon-trash { flex: 0 0 42px; width: 42px; }
+
+  .library { padding: 15px 12px; border-radius: 17px; }
+  .section-title { align-items: flex-start; margin-bottom: 14px; }
+  .section-title h2 { font-size: 21px; }
+  .section-title > button { min-height: 44px; white-space: nowrap; }
+  .library-layout { display: flex; flex-direction: column; gap: 16px; }
+  .books { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .book-card { min-width: 0; min-height: 0; padding: 9px; border-radius: 14px; }
+  .book-cover { height: clamp(92px, 29vw, 135px); margin-bottom: 9px; }
+  .book-card h3 { font-size: 16px; overflow-wrap: anywhere; }
+  .book-card small { font-size: 11px; }
+  .book-actions { gap: 5px; }
+  .book-actions button { min-height: 38px; padding: 7px 5px; font-size: 11px; }
+
+  #calendarPanel {
+    width: 100%;
+    position: static;
+    padding: 14px;
+    border-radius: 15px;
+  }
+  .calendar-day { min-height: 38px; padding: 7px 1px; }
+  .calendar-grid { gap: 3px; }
+
+  /* Barra de ferramentas em faixa rolável: todos os comandos continuam acessíveis. */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 120;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 7px;
+    width: calc(100% + 20px);
+    margin: 0 -10px 10px;
+    padding: 9px 10px;
+    overflow-x: auto;
+    overflow-y: visible;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 5px 16px #57463a18;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+  .toolbar > * { flex: 0 0 auto; }
+  .toolbar button {
+    min-height: 42px;
+    padding: 9px 11px;
+    white-space: nowrap;
+  }
+  .toolbar select { min-height: 42px; }
+  .toolbar .divider { height: 26px; flex: 0 0 1px; }
+  .toolbar label { white-space: nowrap; }
+  .toolbar > div { flex: 0 0 auto; }
+  .sticker-palette {
+    position: fixed;
+    top: 74px;
+    left: 50%;
+    width: min(440px, calc(100vw - 20px));
+    max-height: min(62dvh, 470px);
+    padding: 12px;
+    transform: translateX(-50%);
+    z-index: 500;
+  }
+  .sticker-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .sticker-option { min-width: 0; }
+  .stamp-palette { position: fixed; top: 74px; right: 10px; z-index: 500; width: 190px; }
+
+  .workspace { display: flex; flex-direction: column; gap: 10px; }
+  .side {
+    order: 0;
+    width: 100%;
+    padding: 11px;
+    border-radius: 15px;
+  }
+  .side h3 { margin: 0 0 9px; }
+  .thumbs {
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 2px 1px 7px;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+  .thumb {
+    flex: 0 0 auto;
+    min-width: 100px;
+    min-height: 42px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .side-tools { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-top: 8px; }
+  .side-tools button { min-height: 40px; }
+  .side .hint { margin-bottom: 0; }
+
+  .stage {
+    width: 100%;
+    min-height: 0;
+    padding: 9px 7px 12px;
+    border-radius: 15px;
+  }
+  .stage-top, .page-foot { width: 100%; padding: 0 4px; }
+  .paper {
+    width: 100%;
+    min-height: max(66dvh, 520px);
+    padding: 35px 21px;
+    border-radius: 3px;
+    overflow-wrap: anywhere;
+  }
+  .paper.kind-kin { padding: 38px 23px; }
+  .editable {
+    min-height: max(60dvh, 450px);
+    font-size: 16px;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+  }
+  .paper.kind-lined .editable { line-height: 32px; }
+  .editable img { max-width: min(100%, 260px); }
+  .editable .sticker { font-size: 32px; }
+  .sticker-item { max-width: 100%; }
+  .selection-tools {
+    max-width: calc(100vw - 16px);
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px;
+  }
+  .selection-tools button { min-height: 36px; }
+
+  .modal-backdrop, .event-modal-backdrop {
+    align-items: flex-end;
+    padding: 8px;
+  }
+  .app-modal, .event-modal-card {
+    width: 100%;
+    max-height: min(88dvh, 760px);
+    overflow-y: auto;
+    border-radius: 20px 20px 14px 14px;
+    padding: 19px 16px calc(18px + env(safe-area-inset-bottom));
+  }
+  .event-modal-actions { flex-wrap: wrap; }
+  .event-modal-actions button { min-height: 42px; }
+  .event-modal-actions .event-delete-btn { margin-right: auto; }
+  .event-fields-row { grid-template-columns: 1fr 1fr; }
+  .app-modal input, .event-modal-card input { min-height: 44px; font-size: 16px; }
+  .modal-actions button { min-height: 42px; }
+
+  body[data-theme="dark"] .toolbar { background: #202020; }
+}
+
+@media (max-width: 380px) {
+  .app { padding-left: 7px; padding-right: 7px; }
+  .brand h1 { font-size: 20px; }
+  .section-title { flex-wrap: wrap; }
+  .section-title > button { width: 100%; }
+  .books { gap: 8px; }
+  .book-card { padding: 7px; }
+  .book-actions { flex-direction: column; }
+  .book-actions button { width: 100%; }
+  .paper { padding-left: 16px; padding-right: 16px; }
+  .paper.kind-kin { padding-left: 18px; padding-right: 18px; }
+  .event-fields-row { grid-template-columns: 1fr; }
+}
+
+/* Em telas maiores, mantém a disposição de desktop original. */
+@media (min-width: 761px) {
+  .toolbar { position: relative; }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand"><button class="logo" id="themeToggle" type="button" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">✿</button><div><h1>Scrapbook</h1><p>SUAS MEMÓRIAS, DO SEU JEITO</p></div></div>
+ <div class="header-actions"><button id="homeBtn">⌂ Biblioteca</button><button id="trashTop" class="icon-trash" type="button" title="Lixeira de livros" aria-label="Abrir lixeira">▤</button><button id="saveTop" class="primary">♡ Salvar</button></div>
+</header>
+<main id="library" class="panel library">
+ <div class="section-title"><div><h2>Sua biblioteca</h2><p style="color:var(--muted);margin:5px 0 0">Um cantinho para guardar histórias, fotos e pequenos momentos.</p></div><button id="newBook" class="primary">＋ Novo livro</button></div>
+ <div class="library-layout"><div id="books" class="books"></div>
+ <section id="calendarPanel"><div class="calendar-head"><button class="calendar-nav" id="calendarPrev" aria-label="Mês anterior">‹</button><h3 id="calendarMonthTitle">Calendário</h3><button class="calendar-nav" id="calendarNext" aria-label="Próximo mês">›</button></div><div id="calendarGrid" class="calendar-grid"></div><p id="calendarSelectedDate" class="calendar-selected"></p><div class="calendar-events-panel"><h4>✿ Acontecimentos</h4><div id="calendarEventsList" class="calendar-events-list"></div></div><p class="hint">Toque uma vez em uma data para selecioná-la e novamente para adicionar um acontecimento. Você também pode editar ou excluir eventos.</p></section></div>
+ <p class="hint">Seus projetos ficam salvos neste navegador. Para uma cópia extra, exporte o livro em PDF ou mantenha um backup JSON.</p>
+</main>
+
+<main id="editor" class="editor">
+ <div class="toolbar panel">
+  <button id="backBtn">← Biblioteca</button><span class="divider"></span>
+  <button id="undoBtn" title="Desfazer">↶</button><button id="redoBtn" title="Refazer">↷</button>
+  <span class="divider"></span>
+  <label for="paperMode">Papel</label><select id="paperMode"><option value="lined">Pautado</option><option value="kindle">Kindle</option></select>
+  <span class="divider"></span><div style="position:relative"><button id="stickerBtn" type="button">🌼 Adesivos</button><div class="sticker-palette" id="stickerPalette" aria-label="Biblioteca de adesivos"></div></div><div style="position:relative"><button id="stampBtn" type="button">🍃 Carimbos</button><div class="stamp-palette" id="stampPalette"><button class="stamp-option" data-stamp="✓ ESTUDADO">✓ ESTUDADO</button><button class="stamp-option" data-stamp="✓ CONCLUÍDO">✓ CONCLUÍDO</button><button class="stamp-option" data-stamp="⏳ PENDENTE">⏳ PENDENTE</button><button class="stamp-option" data-stamp="🔍 REVISAR">🔍 REVISAR</button><button class="stamp-option" data-stamp="remove">Remover carimbo</button></div></div><button id="photoBtn">📷 Foto</button><input id="photoInput" type="file" accept="image/*" multiple class="hidden">
+  <span class="divider"></span><button id="addPage" class="soft">📘 Página</button><button id="pdfBtn">⇩ PDF / Imprimir</button><button id="backupBtn">Backup</button>
+ </div>
+ <div id="selectionTools" class="selection-tools" role="toolbar" aria-label="Formatação do texto"><button id="selBold"><b>B</b></button><button id="selSmaller">A−</button><button id="selBigger">A+</button><span class="selection-colors"><button class="color-dot" data-color="#fff19a" title="Marca-texto amarelo"></button><button class="color-dot" data-color="#c9edcf" title="Marca-texto verde"></button><button class="color-dot" data-color="#f6c9dc" title="Marca-texto rosa"></button><button class="color-dot" data-color="#cdddf8" title="Marca-texto azul"></button></span></div>
+ <div class="workspace">
+  <aside class="side panel"><h3 id="bookTitle">Meu livro</h3><div id="pageList" class="thumbs"></div>
+   <div class="side-tools"><button id="renameBook">✎ Renomear</button><button id="deleteBook" class="danger">Excluir livro</button></div>
+   <p class="hint">Dica: selecione um trecho antes de aplicar o marca-texto. As fotos e decorações podem ser inseridas no ponto do cursor.</p>
+  </aside>
+  <section class="stage">
+   <div class="stage-top"><span id="pageLabel">Página 1</span><span>✦ feito com carinho ✦</span></div>
+   <article id="paper" class="paper kind-lined"><div id="content" class="editable" contenteditable="true" spellcheck="true"></div></article>
+   <div class="page-foot"><span>Scrapbook</span><span id="pageCount">1 / 1</span></div>
+  </section>
+ </div>
+</main>
+</div>
+<div class="modal-backdrop" id="newBookModal" aria-hidden="true"><div class="app-modal" role="dialog" aria-modal="true" aria-labelledby="newBookTitle"><h2 id="newBookTitle">Criar novo livro</h2><label for="newBookName">Nome do livro</label><input id="newBookName" type="text" maxlength="70" placeholder="Meu scrapbook"><div class="modal-actions"><button id="cancelNewBook" type="button">Cancelar</button><button id="confirmNewBook" class="primary" type="button">Criar livro</button></div></div></div>
+<div class="modal-backdrop" id="trashModal" aria-hidden="true"><div class="app-modal" role="dialog" aria-modal="true" aria-labelledby="trashTitle"><h2 id="trashTitle">Lixeira de livros</h2><p class="hint">Os livros excluídos ficam aqui até você restaurá-los ou apagá-los permanentemente.</p><div id="trashList" class="trash-list"></div><div class="modal-actions"><button id="closeTrash" type="button">Fechar</button></div></div></div>
+<div class="event-modal-backdrop" id="eventModal" aria-hidden="true"><div class="event-modal-card"><h2 id="eventModalTitle">Um dia especial</h2><label for="eventTitleInput">Acontecimento</label><input id="eventTitleInput" type="text" maxlength="100" placeholder="Ex.: aniversário, passeio..."><div class="event-fields-row"><div><label for="eventDateInput">Data</label><input id="eventDateInput" type="date"></div><div><label for="eventTimeInput">Horário (opcional)</label><input id="eventTimeInput" type="time"></div></div><label>Cor</label><div class="event-color-options" id="eventColorOptions"><button type="button" data-color="#e7a3ad" style="--event-color:#e7a3ad" aria-label="Rosa"></button><button type="button" data-color="#e9bd79" style="--event-color:#e9bd79" aria-label="Amarelo"></button><button type="button" data-color="#9dbb9a" style="--event-color:#9dbb9a" aria-label="Verde"></button><button type="button" data-color="#9bb9d5" style="--event-color:#9bb9d5" aria-label="Azul"></button><button type="button" data-color="#b7a0d2" style="--event-color:#b7a0d2" aria-label="Lilás"></button><button type="button" data-color="#d69a75" style="--event-color:#d69a75" aria-label="Pêssego"></button></div><div class="event-modal-actions"><button id="eventDeleteBtn" class="event-delete-btn" type="button">Excluir</button><button id="eventCancelBtn" type="button">Cancelar</button><button id="eventSaveBtn" class="primary" type="button">Salvar evento</button></div></div></div>
+<script>
+(()=>{
+const KEY='scrapbook_pop_book_v1';
+    const stickerArt = {
+      flower: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><g stroke="#b75c70" stroke-width="2"><ellipse cx="60" cy="32" rx="13" ry="24" fill="#f4a6b8"/><ellipse cx="60" cy="88" rx="13" ry="24" fill="#f4a6b8"/><ellipse cx="32" cy="60" rx="24" ry="13" fill="#f4a6b8"/><ellipse cx="88" cy="60" rx="24" ry="13" fill="#f4a6b8"/><ellipse cx="40" cy="40" rx="13" ry="22" transform="rotate(-45 40 40)" fill="#ffd0d8"/><ellipse cx="80" cy="40" rx="13" ry="22" transform="rotate(45 80 40)" fill="#ffd0d8"/><ellipse cx="40" cy="80" rx="13" ry="22" transform="rotate(45 40 80)" fill="#ffd0d8"/><ellipse cx="80" cy="80" rx="13" ry="22" transform="rotate(-45 80 80)" fill="#ffd0d8"/></g><circle cx="60" cy="60" r="15" fill="#e9b94f" stroke="#a97732" stroke-width="2"/><circle cx="55" cy="55" r="3" fill="#fff1b0"/></svg>`,
+      butterfly: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M58 56C29 6 2 26 19 56C-1 82 28 103 58 67M62 56C91 6 118 26 101 56C121 82 92 103 62 67" fill="#b9b2e4" stroke="#655c98" stroke-width="3"/><path d="M60 39Q48 16 43 22M60 39Q72 16 77 22" fill="none" stroke="#655c98" stroke-width="2"/><ellipse cx="60" cy="61" rx="5" ry="22" fill="#6d5b87"/><circle cx="30" cy="51" r="7" fill="#f9d8e5"/><circle cx="90" cy="51" r="7" fill="#f9d8e5"/></svg>`,
+      leaf: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M20 100Q18 24 98 18Q100 92 20 100Z" fill="#a8c59a" stroke="#557d57" stroke-width="3"/><path d="M20 100Q52 62 91 28M43 77L39 49M59 62L81 62" fill="none" stroke="#557d57" stroke-width="3"/><path d="M24 91Q35 48 80 31" fill="none" stroke="#dce9ce" stroke-width="3"/></svg>`,
+      envelope: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect x="15" y="30" width="90" height="65" rx="4" fill="#fff0e9" stroke="#b86b72" stroke-width="3"/><path d="M17 34L60 67L103 34M17 92L47 62M103 92L73 62" fill="none" stroke="#d18b91" stroke-width="3"/><path d="M60 62C43 48 42 39 51 38Q59 37 60 46Q64 35 73 39Q83 48 60 62Z" fill="#c65e72"/></svg>`,
+      coffee: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M22 42H86V82Q84 98 68 98H41Q24 95 22 82Z" fill="#f4d6ad" stroke="#8d5b43" stroke-width="3"/><path d="M86 51H96Q110 53 103 72Q99 82 86 79" fill="none" stroke="#8d5b43" stroke-width="5"/><ellipse cx="54" cy="42" rx="32" ry="8" fill="#6d4534" stroke="#8d5b43" stroke-width="3"/><path d="M42 29Q32 18 42 10M58 29Q48 18 58 10M73 29Q63 18 73 10" fill="none" stroke="#b9a39a" stroke-width="3" stroke-linecap="round"/><path d="M32 70Q54 80 76 70" fill="none" stroke="#d09c7d" stroke-width="3"/></svg>`,
+      book: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M14 28Q37 20 58 34V96Q36 82 14 91Z" fill="#e7a7ad" stroke="#985b63" stroke-width="3"/><path d="M106 28Q83 20 62 34V96Q84 82 106 91Z" fill="#f6d8c4" stroke="#985b63" stroke-width="3"/><path d="M60 34V96" stroke="#985b63" stroke-width="3"/><path d="M23 40Q38 36 49 44M23 51Q38 47 49 55M71 44Q84 36 97 40M71 55Q84 47 97 51" stroke="#fff4e8" stroke-width="3" fill="none"/></svg>`,
+      star: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M60 8L73 43L110 45L82 69L91 106L60 86L29 106L38 69L10 45L47 43Z" fill="#f5ce67" stroke="#b88936" stroke-width="3" stroke-linejoin="round"/><path d="M60 22L66 45L88 47L71 61L76 83L60 71L44 83L49 61L32 47L54 45Z" fill="#ffe9a2"/></svg>`,
+      mushroom: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M60 14C31 14 12 38 13 59H107C108 38 89 14 60 14Z" fill="#d97979" stroke="#934d55" stroke-width="3"/><circle cx="39" cy="39" r="7" fill="#ffe9d7"/><circle cx="69" cy="30" r="6" fill="#ffe9d7"/><circle cx="83" cy="48" r="5" fill="#ffe9d7"/><path d="M46 59L40 94Q60 105 80 94L74 59Z" fill="#f7e4bd" stroke="#b89a72" stroke-width="3"/><path d="M49 76Q60 82 71 76" fill="none" stroke="#d4b68d" stroke-width="3"/></svg>`,
+      bow: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M55 56Q22 14 13 36Q7 63 54 68Q18 92 31 103Q47 108 60 72Q74 108 90 103Q103 92 66 68Q113 63 107 36Q98 14 65 56Z" fill="#e99caf" stroke="#a95770" stroke-width="3"/><ellipse cx="60" cy="64" rx="11" ry="14" fill="#f7c6d0" stroke="#a95770" stroke-width="3"/></svg>`,
+      moon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M83 15C48 20 34 53 48 81Q62 108 91 94Q70 104 48 94Q12 77 22 43Q33 9 65 10Z" fill="#f2d58a" stroke="#b08b43" stroke-width="3"/><path d="M88 27L93 39L106 40L96 49L99 62L88 55L77 62L80 49L70 40L83 39Z" fill="#d6b4ce" stroke="#96789b" stroke-width="2"/></svg>`,
+      strawberry: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M60 35C28 15 12 43 27 69L60 108L93 69C108 43 92 15 60 35Z" fill="#ef8d9a" stroke="#b95d70" stroke-width="3"/><path d="M60 37Q43 12 29 25Q43 28 48 40M60 37Q72 8 91 24Q76 29 68 41" fill="#9bbd83" stroke="#658c68" stroke-width="3"/><g fill="#ffe9a4"><ellipse cx="42" cy="56" rx="2.5" ry="4"/><ellipse cx="67" cy="53" rx="2.5" ry="4"/><ellipse cx="52" cy="72" rx="2.5" ry="4"/><ellipse cx="77" cy="70" rx="2.5" ry="4"/></g></svg>`,
+      heart: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M60 101S10 69 15 39C19 12 49 13 60 36C75 9 105 16 106 40C108 69 60 101 60 101Z" fill="#ef9aaa" stroke="#b85d73" stroke-width="4"/><path d="M33 35Q39 25 49 34" stroke="#fff0f2" stroke-width="5" fill="none" stroke-linecap="round"/></svg>`,
+      cherry: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M60 58Q46 19 29 18M60 58Q75 12 93 20" fill="none" stroke="#658b59" stroke-width="4"/><path d="M61 45Q35 22 23 38Q39 49 61 45M65 40Q81 12 101 26Q91 43 65 40" fill="#a9c98d" stroke="#658b59" stroke-width="3"/><circle cx="39" cy="74" r="24" fill="#d96f7b" stroke="#a34f5c" stroke-width="3"/><circle cx="83" cy="75" r="24" fill="#e7848d" stroke="#a34f5c" stroke-width="3"/><ellipse cx="31" cy="65" rx="5" ry="8" fill="#ffd9d6"/><ellipse cx="75" cy="66" rx="5" ry="8" fill="#ffd9d6"/></svg>`,
+      cloud: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M26 83Q8 80 12 61Q15 44 35 46Q43 20 67 29Q84 34 85 51Q108 47 110 68Q112 85 92 87Z" fill="#d8eafa" stroke="#86a9c5" stroke-width="4"/><circle cx="48" cy="64" r="2.5" fill="#55758c"/><circle cx="72" cy="64" r="2.5" fill="#55758c"/><path d="M51 74Q60 82 69 74" stroke="#55758c" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+      planet: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><circle cx="59" cy="58" r="31" fill="#c6b5e8" stroke="#8a78b1" stroke-width="4"/><ellipse cx="59" cy="61" rx="50" ry="15" fill="none" stroke="#e7b6c8" stroke-width="8" transform="rotate(-20 59 61)"/><circle cx="48" cy="47" r="6" fill="#e8dcf7"/><path d="M89 18L94 29L106 30L97 38L99 50L89 44L79 50L81 38L72 30L84 29Z" fill="#f5d57f"/></svg>`,
+      cupcake: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M28 58Q12 43 28 30Q37 23 47 31Q56 8 73 22Q88 18 93 35Q110 43 94 59Z" fill="#f5c3d0" stroke="#b86d85" stroke-width="3"/><path d="M28 59H94L84 101H39Z" fill="#e8b5a4" stroke="#b87e72" stroke-width="3"/><path d="M40 70H87M43 83H84" stroke="#fff0df" stroke-width="4"/><circle cx="60" cy="25" r="6" fill="#d96f7b"/></svg>`,
+      candle: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect x="35" y="42" width="50" height="62" rx="5" fill="#f7d6a4" stroke="#b58b59" stroke-width="3"/><path d="M60 42V31" stroke="#80624b" stroke-width="3"/><path d="M60 28C42 17 57 5 63 11Q78 22 60 28Z" fill="#f2a65a" stroke="#c87d42" stroke-width="2"/><path d="M43 60Q60 68 77 60M43 79Q60 87 77 79" stroke="#e5a8b4" stroke-width="4" fill="none"/></svg>`,
+      pencil: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><g transform="rotate(-35 60 60)"><rect x="43" y="14" width="34" height="78" rx="5" fill="#f3d16f" stroke="#aa8a42" stroke-width="3"/><path d="M43 20H77M43 29H77" stroke="#e79c9c" stroke-width="4"/><path d="M43 92L60 112L77 92Z" fill="#e9c49b" stroke="#aa8a42" stroke-width="3"/><path d="M55 106L60 112L65 106Z" fill="#55453f"/></g></svg>`,
+      perfume: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect x="45" y="18" width="30" height="18" rx="3" fill="#d7b5a8" stroke="#9b756d" stroke-width="3"/><rect x="34" y="37" width="52" height="66" rx="9" fill="#e9c9d6" stroke="#a7758b" stroke-width="3"/><rect x="42" y="56" width="36" height="25" rx="3" fill="#fff0e8" stroke="#c89ba8" stroke-width="2"/><path d="M60 59L64 67L73 68L66 74L68 80L60 76L52 80L54 72L48 68L56 67Z" fill="#d5a75d"/></svg>`,
+      butterfly2: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M58 59C26 8 5 28 17 55Q28 74 58 65C27 70 26 107 48 99Q62 90 61 65M62 59C94 8 115 28 103 55Q92 74 62 65C93 70 94 107 72 99Q58 90 59 65" fill="#d8b5e7" stroke="#9274a8" stroke-width="3"/><path d="M60 44V87" stroke="#765c87" stroke-width="5" stroke-linecap="round"/><path d="M59 45Q48 27 40 32M61 45Q72 27 80 32" stroke="#765c87" stroke-width="3" fill="none"/></svg>`,
+      flower2: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><g fill="#f5b8ca" stroke="#b86e88" stroke-width="3"><ellipse cx="60" cy="28" rx="15" ry="23"/><ellipse cx="60" cy="92" rx="15" ry="23"/><ellipse cx="28" cy="60" rx="23" ry="15"/><ellipse cx="92" cy="60" rx="23" ry="15"/><ellipse cx="38" cy="38" rx="15" ry="23" transform="rotate(-45 38 38)"/><ellipse cx="82" cy="38" rx="15" ry="23" transform="rotate(45 82 38)"/></g><circle cx="60" cy="60" r="17" fill="#f5d77e" stroke="#b38c42" stroke-width="3"/></svg>`,
+      snail: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M17 84Q22 65 42 72L88 72Q105 74 105 91H17Z" fill="#c5dcae" stroke="#7b9b6b" stroke-width="3"/><circle cx="54" cy="58" r="27" fill="#e5b9a0" stroke="#a87e69" stroke-width="3"/><path d="M54 38Q75 44 69 61Q65 77 49 69Q37 62 47 51Q55 45 60 54" fill="none" stroke="#b37f6c" stroke-width="4"/><path d="M90 73V54M100 74V54" stroke="#7b9b6b" stroke-width="4"/><circle cx="90" cy="51" r="5" fill="#fff4e9" stroke="#7b9b6b" stroke-width="2"/><circle cx="100" cy="51" r="5" fill="#fff4e9" stroke="#7b9b6b" stroke-width="2"/></svg>`,
+      teacup: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M20 47H84V77Q82 96 60 96H43Q22 93 20 77Z" fill="#f4d7e0" stroke="#ad7487" stroke-width="3"/><path d="M84 54H96Q108 55 103 72Q99 81 84 78" fill="none" stroke="#ad7487" stroke-width="5"/><ellipse cx="52" cy="47" rx="32" ry="7" fill="#8c6557"/><path d="M39 36Q30 24 40 14M56 36Q47 24 57 14M71 36Q62 24 72 14" fill="none" stroke="#b6a19a" stroke-width="3" stroke-linecap="round"/><path d="M29 69Q53 79 76 69" fill="none" stroke="#d8a7b9" stroke-width="3"/></svg>`,
+      flowerpot: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M32 63H88L80 103H40Z" fill="#e7b49e" stroke="#a97967" stroke-width="3"/><path d="M60 65V25M60 49Q27 47 29 25Q52 24 60 49M60 42Q87 39 91 17Q68 18 60 42" fill="#9fbd8b" stroke="#67895f" stroke-width="3"/><circle cx="60" cy="20" r="9" fill="#f3c1d0" stroke="#b86e88" stroke-width="2"/></svg>`
+    };
+    const stickerLabels = {flower:'Flor', butterfly:'Borboleta', leaf:'Folhagem', envelope:'Cartinha', coffee:'Café', book:'Livros', star:'Estrela', mushroom:'Cogumelo', bow:'Laço', moon:'Lua e estrela', strawberry:'Morango', heart:'Coração', cherry:'Cerejas', cloud:'Nuvem', planet:'Planeta', cupcake:'Cupcake', candle:'Velinha', pencil:'Lápis', perfume:'Perfume', butterfly2:'Borboleta lilás', flower2:'Flor rosa', snail:'Caracol', teacup:'Xícara de chá', flowerpot:'Vasinho'};
+
+    // Coleção ampliada: adesivos adicionais em ilustração delicada, no mesmo universo visual
+    // dos adesivos originais (tons pastel, contorno suave e acabamento de figurinha).
+    const extraStickerSet = [
+      ['cactus','Cacto','🌵'],['fern','Samambaia','🌿'],['tulip','Tulipa','🌷'],['sunflower','Girassol','🌻'],['rose','Rosa','🌹'],['hibiscus','Hibisco','🌺'],['chamomile','Margarida','🌼'],['pottedplant','Planta em vaso','🪴'],['tree','Árvore','🌳'],['palm','Coqueiro','🌴'],
+      ['rainbow','Arco-íris','🌈'],['sun','Sol','☀️'],['suncloud','Sol entre nuvens','🌤️'],['rain','Chuva','🌧️'],['snow','Floco de neve','❄️'],['lightning','Raio','⚡'],['comet','Cometa','☄️'],['sparkles','Brilhos','✨'],['galaxy','Galáxia','🌌'],['saturn','Saturno','🪐'],
+      ['cat','Gatinho','🐱'],['dog','Cachorrinho','🐶'],['bunny','Coelhinho','🐰'],['bear','Ursinho','🧸'],['fox','Raposa','🦊'],['bee','Abelhinha','🐝'],['ladybug','Joaninha','🐞'],['frog','Sapo','🐸'],['whale','Baleia','🐳'],['turtle','Tartaruga','🐢'],
+      ['smile','Sorriso','😊'],['loveface','Apaixonado','🥰'],['laugh','Rindo','😂'],['wink','Piscadinha','😉'],['cool','Descolado','😎'],['sleepy','Soninho','😴'],['thinking','Pensativo','🤔'],['cry','Chorando','🥹'],['celebrate','Comemoração','🥳'],['calm','Tranquilidade','😌'],
+      ['camera','Câmera','📷'],['headphones','Fones','🎧'],['music','Música','🎵'],['paint','Paleta de tintas','🎨'],['scissors','Tesoura','✂️'],['glue','Cola','🧴'],['notebook','Caderno','📓'],['calendar','Calendário','🗓️'],['clock','Relógio','⏰'],['lamp','Luminária','💡'],
+      ['key','Chave','🗝️'],['mug','Caneca','☕'],['tea','Chá','🍵'],['cookie','Biscoito','🍪'],['cake','Bolo','🍰'],['donut','Rosquinha','🍩'],['peach','Pêssego','🍑'],['lemon','Limão','🍋'],['grapes','Uvas','🍇'],['watermelon','Melancia','🍉'],
+      ['gift','Presente','🎁'],['ribbon','Fita','🎀'],['crown','Coroa','👑'],['diamond','Diamante','💎'],['balloon','Balão','🎈'],['confetti','Confetes','🎊'],['flowerbouquet','Buquê','💐'],['letter','Carta','💌'],['heartpink','Coração rosa','💗'],['heartyellow','Coração amarelo','💛'],
+      ['house','Casinha','🏡'],['umbrella','Guarda-chuva','☂️'],['bicycle','Bicicleta','🚲'],['sailboat','Barquinho','⛵'],['train','Trem','🚂'],['airplane','Avião','✈️']
+    ];
+    // Recortes variados: cada adesivo extra recebe uma borda orgânica diferente,
+    // alternando contorno pontilhado, tracejado e recorte irregular tipo papel.
+    const stickerCutShapes = [
+      'M60 7C72 8 77 14 87 17C100 18 106 29 103 40C101 51 113 59 108 72C104 84 94 86 87 99C80 110 68 108 58 105C46 111 35 105 29 97C17 94 12 83 16 71C7 59 14 48 17 38C17 25 28 18 40 19C47 11 53 8 60 7Z',
+      'M58 8Q72 5 80 17Q98 13 103 32Q112 45 103 57Q116 75 99 86Q94 105 75 101Q60 115 47 103Q25 111 21 91Q5 79 17 62Q7 42 25 32Q31 13 48 18Z',
+      'M60 9C75 3 79 20 91 17C108 14 102 34 108 44C117 58 101 65 108 79C112 95 91 91 84 104C71 115 64 98 51 107C35 115 34 96 22 91C7 81 24 67 13 55C7 39 27 39 29 25C37 10 48 23 60 9Z',
+      'M60 8Q77 13 88 13Q99 22 105 36Q101 51 112 63Q105 78 96 88Q83 91 78 108Q61 103 49 111Q35 101 24 96Q20 80 9 70Q18 55 12 42Q25 30 30 18Q47 20 60 8Z',
+      'M60 6Q70 16 84 12Q89 25 104 29Q98 43 111 55Q99 66 107 81Q91 83 86 103Q71 96 59 112Q46 98 33 105Q29 88 13 83Q22 67 8 56Q23 45 17 30Q36 29 41 13Q53 19 60 6Z',
+      'M60 10C72 4 81 18 91 21C105 23 102 40 109 50C113 64 97 72 103 85C94 99 78 94 69 109C55 103 43 112 34 98C17 96 22 79 11 69C21 55 10 43 23 32C29 17 45 23 60 10Z'
+    ];
+    const stickerCutPatterns = ['1 4', '5 3', '2 3 7 3', '0', '3 2', '7 3 1 3'];
+    const stickerCutColors = ['#cda8a0','#b8a5c9','#a9b99a','#d2a66f','#c58f9b','#9eb5c7'];
+    extraStickerSet.forEach(([key,label,emoji], index) => {
+      stickerLabels[key] = label;
+      const shape = stickerCutShapes[index % stickerCutShapes.length];
+      const pattern = stickerCutPatterns[index % stickerCutPatterns.length];
+      const edge = stickerCutColors[index % stickerCutColors.length];
+      stickerArt[key] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="${shape}" fill="#fffaf5" stroke="#fff" stroke-width="9" stroke-linejoin="round"/><path d="${shape}" fill="none" stroke="${edge}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="${pattern}"/><text x="60" y="79" text-anchor="middle" font-size="66" font-family="Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif">${emoji}</text><path d="M29 29Q35 22 43 25" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></svg>`;
+    });
+
+    // Quarta aba: elementos básicos de organização visual (setas, balões e símbolos).
+    const essentialStickerSet = [
+      ['arrowRight','Seta para direita','➜'],['arrowLeft','Seta para esquerda','⬅'],
+      ['arrowUp','Seta para cima','⬆'],['arrowDown','Seta para baixo','⬇'],
+      ['arrowBoth','Seta dupla','↔'],['arrowTurn','Seta curva','↪'],
+      ['speechBubble','Balão de fala','💬'],['thoughtBubble','Balão de pensamento','💭'],
+      ['smallBubble','Balão simples','🗨️'],['exclamation','Exclamação','❗'],
+      ['question','Interrogação','❓'],['checkSymbol','Concluído','✓'],
+      ['crossSymbol','Atenção / X','✕'],['plusSymbol','Adicionar','＋'],
+      ['starSymbol','Destaque','★'],['heartSymbol','Coração','♥']
+    ];
+    essentialStickerSet.forEach(([key,label,emoji], index) => {
+      stickerLabels[key] = label;
+      const shape = stickerCutShapes[(index + 2) % stickerCutShapes.length];
+      const edge = stickerCutColors[(index + 1) % stickerCutColors.length];
+      stickerArt[key] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="${shape}" fill="#fffaf5" stroke="#fff" stroke-width="9" stroke-linejoin="round"/><path d="${shape}" fill="none" stroke="${edge}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="${stickerCutPatterns[(index + 2) % stickerCutPatterns.length]}"/><text x="60" y="79" text-anchor="middle" font-size="66" font-family="Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif">${emoji}</text><path d="M29 29Q35 22 43 25" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></svg>`;
+    });
+    const essentialStickerTypes = essentialStickerSet.map(([key]) => key);
+
+    function stickerData(type) { return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(stickerArt[type] || stickerArt.flower); }
+
+const $=id=>document.getElementById(id);
+let books=[], currentId=null, pageIndex=0, history=[], future=[], lastSaved='';
+const demo=()=>({id:'demo-alice',title:'Alice e o Jardim das Horas',updated:Date.now(),pages:[
+ {mode:'lined',fontSize:18,html:`<h2 style="font-family:Georgia,serif">Alice e o Jardim das Horas</h2><p><b>Capítulo I — O relógio que espirrava</b></p><p>Na tarde em que as nuvens decidiram caminhar de costas, Alice encontrou um relógio enterrado entre as raízes de uma macieira. Ele não marcava horas: espirrava minutos pequeninos, que brilhavam no ar como vaga-lumes.</p><p>“Estou atrasado para ontem!”, anunciou o relógio, ajeitando seus ponteiros como quem ajeita um chapéu.</p><p>Alice seguiu uma trilha de pedras cor-de-menta até um jardim onde as flores conversavam por enigmas. No centro, uma roseira cultivava pequenos sóis em vez de rosas. Cada sol guardava uma lembrança que alguém quase havia esquecido.</p><p>Uma borboleta de papel pousou em seu ombro. <span style="background:#fff19a">“O tempo floresce quando prestamos atenção”</span>, dizia a inscrição em suas asas.</p><p>Alice sorriu. Talvez a aventura não fosse descobrir que horas eram, mas descobrir o que fazer com cada instante.</p><p><span class="sticker">🦋</span> <span class="sticker">🌷</span> <span class="stamp">UM DIA ESPECIAL</span> <span class="sticker">⏰</span></p>`},
+ {mode:'kindle',fontSize:18,html:`<h2 style="font-family:Georgia,serif">Pequeno guia de descobertas</h2><p>Esta página é seu laboratório criativo! Experimente as ferramentas e veja seu livro ganhar personalidade.</p><p><b>✿ Adesivos:</b> clique em “Adesivos” e escolha um desenho para inserir no texto.</p><p><b>▧ Fotografias:</b> use “Foto” para selecionar imagens do seu dispositivo. Elas entram na página no ponto do cursor.</p><p><b>✧ Carimbos:</b> escolha uma pequena marca decorativa para registrar uma ocasião.</p><p><b>Marca-texto:</b> selecione uma frase e clique em uma das cores da paleta.</p><p><b>↶ Desfazer / ↷ Refazer:</b> reverta ou recupere alterações recentes enquanto edita.</p><p><b>＋ Página:</b> crie novas folhas. Clique nas miniaturas à esquerda para navegar entre elas.</p><p><b>Papel:</b> alterne entre Pautado e Kindle. O modo Kindle usa papel creme e tipografia serifada.</p><p><b>A− / A+:</b> ajuste a fonte entre 14 e 30 px.</p><p><b>♡ Salvar:</b> guarde suas alterações no navegador. “PDF / Imprimir” abre a janela de impressão, onde você pode escolher “Salvar como PDF”. “Backup” baixa uma cópia editável dos seus livros.</p><p>Agora é sua vez: acrescente uma foto, destaque uma frase e transforme esta página em uma lembrança sua. ✨</p>`}
+]});
+
+// Capas ilustradas predefinidas: cada livro recebe uma arte aleatória, salva junto com ele.
+let lastGeneratedCoverStyle='';
+function makeRandomCover(excludeStyle=''){
+  // Paletas vibrantes/neon, mantendo variações florais e ilustradas em ambos os temas.
+  const palettes = [
+    ["#ff3cac","#784bff","#22d3ee","#3b0754"],["#00f5a0","#00d9f5","#faff00","#064e45"],
+    ["#ff6b00","#ff2e93","#8b5cf6","#501044"],["#00c2ff","#7c3aed","#ff4fd8","#24105b"],
+    ["#faff00","#ff7a00","#ff3d81","#5a2600"],["#00f0ff","#00c48c","#b8ff3b","#064b58"],
+    ["#ff4dff","#7b2cff","#00e5ff","#3b0754"],["#ff3864","#ff9f1c","#ffe66d","#64213a"],
+    ["#a3ff12","#00e5ff","#ff4fd8","#173b5b"],["#ff5e5b","#d16bff","#5ce1e6","#4b174e"],
+    ["#ff78b7","#9b5de5","#fee440","#54205f"],
+    ["#fb8500","#ffb703","#219ebc","#023047"],
+    ["#80ed99","#57cc99","#4ea8de","#184e77"],
+    ["#f72585","#7209b7","#4cc9f0","#3a0ca3"],
+    ["#ffadad","#ffc6ff","#a0c4ff","#6a3d75"],
+    ["#ff9f1c","#ffbf69","#cbf3f0","#2ec4b6"],
+    ["#c77dff","#e0aaff","#ff70a6","#5a189a"],
+    ["#38b000","#70e000","#00b4d8","#005f73"],
+    ["#ff4d6d","#c9184a","#ffb3c1","#590d22"],
+    ["#3a86ff","#8338ec","#ff006e","#240046"],
+    ["#fca311","#e5e5e5","#14213d","#000000"],
+    ["#b8f2e6","#aed9e0","#ffa69e","#5e6472"],
+    ["#e76f51","#f4a261","#2a9d8f","#264653"],
+    ["#d8a7ca","#b8c0ff","#a3c4f3","#493657"]
+  ];
+  const scenes = [
+    `<circle cx="245" cy="105" r="55" fill="${'P2'}"/><path d="M0 255 Q90 165 175 250 T360 235 V420 H0Z" fill="${'P1'}"/><path d="M0 315 Q100 240 190 315 T360 295 V420 H0Z" fill="${'P0'}"/><g fill="${'P3'}"><path d="M75 270q-8-65 4-100q16 30 8 100"/><path d="M85 235q-45-38-48-5q20 25 48 5"/><path d="M90 215q35-48 53-17q-14 27-53 17"/></g>`,
+    `<path d="M0 300 Q70 245 130 290 T260 280 T360 270 V420 H0Z" fill="${'P1'}"/><g fill="${'P2'}"><path d="M175 290q-48-60 0-100q48 40 0 100"/><path d="M175 290q-65-35-48-78q50 8 48 78"/><path d="M175 290q65-35 48-78q-50 8-48 78"/></g><circle cx="175" cy="270" r="17" fill="${'P3'}"/><path d="M175 290v100" stroke="${'P3'}" stroke-width="7"/>`,
+    `<path d="M0 300 L90 190 L165 275 L245 155 L360 300 V420 H0Z" fill="${'P1'}"/><path d="M0 330 L110 250 L190 330 L285 220 L360 300 V420 H0Z" fill="${'P0'}"/><circle cx="275" cy="90" r="36" fill="${'P2'}"/>`,
+    `<g fill="none" stroke="${'P3'}" stroke-width="5" opacity=".8"><path d="M40 350 Q100 80 180 220 T330 70"/><path d="M20 120 Q130 260 210 100 T350 260"/></g><g fill="${'P2'}"><circle cx="90" cy="125" r="22"/><circle cx="245" cy="305" r="28"/><circle cx="300" cy="135" r="15"/></g>`,
+    `<rect x="40" y="65" width="280" height="290" rx="120" fill="${'P1'}" opacity=".8"/><path d="M180 95 C110 165 110 245 180 310 C250 245 250 165 180 95Z" fill="${'P2'}"/><path d="M180 115v175" stroke="${'P3'}" stroke-width="5"/><path d="M180 205q-60-60-75-10q30 50 75 10M180 245q60-60 75-10q-30 50-75 10" fill="${'P0'}"/>`,
+    `<g fill="${'P2'}"><path d="M70 300q-35-70 25-95q60 25 25 95z"/><path d="M170 225q-35-70 25-95q60 25 25 95z"/><path d="M250 320q-35-70 25-95q60 25 25 95z"/></g><g stroke="${'P3'}" stroke-width="5" fill="none"><path d="M120 300v80M220 225v155M300 320v60"/></g>`,
+    `<circle cx="180" cy="210" r="112" fill="${'P1'}"/><circle cx="180" cy="210" r="78" fill="${'P2'}"/><path d="M180 130l18 58 60 2-48 37 17 58-47-35-48 35 17-58-48-37 60-2z" fill="${'P3'}"/>`,
+    `<path d="M0 270 Q90 210 180 270 T360 270 V420 H0Z" fill="${'P1'}"/><path d="M0 325 Q90 265 180 325 T360 325 V420 H0Z" fill="${'P0'}"/><g fill="${'P2'}"><circle cx="85" cy="110" r="25"/><circle cx="180" cy="75" r="15"/><circle cx="270" cy="130" r="30"/></g>`,
+    // Padrões florais em tons pastel
+    `<g opacity=".9"><g fill="${'P2'}"><circle cx="75" cy="85" r="22"/><circle cx="53" cy="107" r="22"/><circle cx="97" cy="107" r="22"/><circle cx="75" cy="129" r="22"/><circle cx="75" cy="107" r="13" fill="${'P3'}"/><circle cx="265" cy="260" r="26"/><circle cx="239" cy="286" r="26"/><circle cx="291" cy="286" r="26"/><circle cx="265" cy="312" r="26"/><circle cx="265" cy="286" r="14" fill="${'P3'}"/></g><path d="M75 130q-10 90 45 150M265 315q-5 45 35 65" stroke="${'P3'}" stroke-width="7" fill="none"/><g fill="${'P1'}"><ellipse cx="118" cy="220" rx="22" ry="10" transform="rotate(30 118 220)"/><ellipse cx="290" cy="365" rx="22" ry="10" transform="rotate(-25 290 365)"/></g></g>`,
+    `<g fill="none" stroke="${'P3'}" stroke-width="5"><path d="M30 390Q70 260 40 130M330 390Q285 260 320 120M180 420Q145 270 185 60"/></g><g fill="${'P2'}"><g transform="translate(40 130)"><circle r="16"/><circle cx="22" r="16"/><circle cy="22" r="16"/><circle cy="-22" r="16"/><circle cx="-22" r="16"/><circle r="8" fill="${'P3'}"/></g><g transform="translate(320 120)"><circle r="17"/><circle cx="23" r="17"/><circle cy="23" r="17"/><circle cy="-23" r="17"/><circle cx="-23" r="17"/><circle r="8" fill="${'P3'}"/></g><g transform="translate(185 60)"><circle r="14"/><circle cx="20" r="14"/><circle cy="20" r="14"/><circle cy="-20" r="14"/><circle cx="-20" r="14"/><circle r="7" fill="${'P3'}"/></g></g>`,
+    `<g fill="${'P1'}" opacity=".9"><path d="M20 80q45-55 85 0q-40 60-85 0M255 100q45-55 85 0q-40 60-85 0M20 300q45-55 85 0q-40 60-85 0M255 320q45-55 85 0q-40 60-85 0"/></g><g fill="${'P2'}"><circle cx="75" cy="80" r="16"/><circle cx="310" cy="100" r="16"/><circle cx="75" cy="300" r="16"/><circle cx="310" cy="320" r="16"/></g><path d="M0 190Q90 120 180 190T360 190" stroke="${'P3'}" stroke-width="4" fill="none"/>`,
+    `<g fill="${'P2'}"><path d="M180 210c-70-100-150-20-70 55c-10 85 130 85 120 0c80-75 0-155-50-55z"/><circle cx="180" cy="245" r="22" fill="${'P3'}"/></g><path d="M180 270q-25 80-90 110m90-80q35 65 90 80" stroke="${'P3'}" stroke-width="6" fill="none"/><g fill="${'P1'}"><ellipse cx="90" cy="350" rx="25" ry="12" transform="rotate(25 90 350)"/><ellipse cx="270" cy="360" rx="25" ry="12" transform="rotate(-25 270 360)"/></g>`
+  ];
+  const all=[];
+  palettes.forEach((_,pi)=>scenes.forEach((_,si)=>all.push(`${pi}:${si}`)));
+  const previous = /^\d+:\d+$/.test(excludeStyle) ? excludeStyle.split(':').map(Number) : null;
+  // Evita repetir a mesma combinação visual e também a mesma paleta ou cena no livro seguinte.
+  let choices=all.filter(k=>{
+    if(!previous) return true;
+    const [pi,si]=k.split(':').map(Number);
+    return pi!==previous[0] && si!==previous[1];
+  });
+  if(!choices.length) choices=all.filter(k=>k!==excludeStyle);
+  const style=choices[Math.floor(Math.random()*choices.length)];
+  const [pi,si]=style.split(':').map(Number), p=palettes[pi];
+  lastGeneratedCoverStyle=style;
+  const scene=scenes[si].replaceAll('P0',p[0]).replaceAll('P1',p[1]).replaceAll('P2',p[2]).replaceAll('P3',p[3]);
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420"><defs><linearGradient id="wash" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${p[0]}"/><stop offset="1" stop-color="${p[2]}"/></linearGradient></defs><rect width="360" height="420" fill="url(#wash)"/>${scene}<rect x="12" y="12" width="336" height="396" rx="22" fill="none" stroke="#fff" stroke-width="5" opacity=".75"/><g fill="#fff" opacity=".75"><circle cx="48" cy="55" r="4"/><circle cx="310" cy="55" r="5"/><circle cx="315" cy="365" r="4"/></g></svg>`;
+  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+}
+
+const TRASH_KEY='scrapbook_pop_trash_v1';
+function readTrash(){try{return JSON.parse(localStorage.getItem(TRASH_KEY)||'[]')}catch{return []}}
+function saveTrash(items){localStorage.setItem(TRASH_KEY,JSON.stringify(items))}
+function load(){try{books=JSON.parse(localStorage.getItem(KEY)||'[]')}catch{books=[]}const seeded=localStorage.getItem('scrapbook_demo_seeded_v1');if(!seeded){if(!books.some(b=>b.id==='demo-alice')&&!readTrash().some(b=>b.id==='demo-alice'))books.unshift(demo());localStorage.setItem('scrapbook_demo_seeded_v1','yes')}let prev='';const coverRefresh='neon-covers-v2';if(localStorage.getItem(coverRefresh)!=='done'){books.forEach(b=>{b.coverImage=makeRandomCover(prev);b.coverStyle=lastGeneratedCoverStyle;delete b.coverEmoji;prev=b.coverStyle});localStorage.setItem(coverRefresh,'done')}else{books.forEach(b=>{if(!b.coverImage){b.coverImage=makeRandomCover(prev);b.coverStyle=lastGeneratedCoverStyle;delete b.coverEmoji}else if(!b.coverStyle){b.coverStyle='legacy-'+Math.random().toString(36).slice(2)}prev=b.coverStyle||''})}persist();renderLibrary()}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(books));lastSaved=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}catch(e){alert('Não foi possível salvar. O armazenamento do navegador pode estar cheio. Exporte um backup e remova imagens grandes.');}}
+function active(){return books.find(b=>b.id===currentId)}
+function page(){return active()?.pages[pageIndex]}
+function renderLibrary(){$('library').style.display='block';$('editor').style.display='none';$('books').innerHTML='';books.forEach(b=>{let card=document.createElement('div');card.className='book-card';let cover=document.createElement('div');cover.className='book-cover';if(b.coverImage){let im=document.createElement('img');im.src=b.coverImage;cover.append(im)}else{cover.style.background='linear-gradient(135deg,#f6dce5,#d8e8df)'}let title=document.createElement('h3');title.textContent=b.title;let meta=document.createElement('small');meta.textContent=b.pages.length+' página(s) · '+new Date(b.updated||Date.now()).toLocaleDateString('pt-BR');let open=document.createElement('button');open.className='primary';open.textContent='Abrir livro';open.onclick=()=>openBook(b.id);let remove=document.createElement('button');remove.className='book-trash';remove.type='button';remove.textContent='🗑 Excluir';remove.title='Mover para a lixeira';remove.onclick=e=>{e.stopPropagation();moveBookToTrash(b.id)};let row=document.createElement('div');row.className='book-actions';row.append(open,remove);card.append(cover,title,meta,row);$('books').append(card)})} 
+function moveBookToTrash(id){if(currentId===id){capture();persist()}const b=books.find(x=>x.id===id);if(!b)return;if(!confirm(`Mover “${b.title}” para a lixeira? Você poderá restaurá-lo depois.`))return;books=books.filter(x=>x.id!==id);const trash=readTrash();trash.unshift({...b,deletedAt:Date.now()});saveTrash(trash);if(currentId===id)currentId=null;persist();renderLibrary();renderTrash()}
+function restoreBook(id){const trash=readTrash(),i=trash.findIndex(b=>b.id===id);if(i<0)return;const [b]=trash.splice(i,1);delete b.deletedAt;books.push(b);saveTrash(trash);persist();renderTrash();renderLibrary()}
+function permanentlyDeleteBook(id){const trash=readTrash(),b=trash.find(x=>x.id===id);if(!b)return;if(!confirm(`Apagar “${b.title}” permanentemente? Esta ação não pode ser desfeita.`))return;saveTrash(trash.filter(x=>x.id!==id));renderTrash()}
+function renderTrash(){const box=$('trashList');if(!box)return;const items=readTrash();box.innerHTML='';if(!items.length){box.innerHTML='<p class="trash-empty">A lixeira está vazia.</p>';return}items.forEach(b=>{const row=document.createElement('div');row.className='trash-item';const info=document.createElement('div');info.className='trash-name';const title=document.createElement('strong');title.textContent=b.title;const meta=document.createElement('small');meta.textContent='Excluído em '+new Date(b.deletedAt||Date.now()).toLocaleDateString('pt-BR');info.append(title,meta);const restore=document.createElement('button');restore.className='primary';restore.type='button';restore.textContent='Restaurar';restore.onclick=()=>restoreBook(b.id);const del=document.createElement('button');del.className='permanent-delete';del.type='button';del.textContent='Excluir para sempre';del.onclick=()=>permanentlyDeleteBook(b.id);row.append(info,restore,del);box.append(row)})}
+function openTrash(){$('trashModal').classList.add('active');$('trashModal').setAttribute('aria-hidden','false');renderTrash()}
+function closeTrash(){$('trashModal').classList.remove('active');$('trashModal').setAttribute('aria-hidden','true')}
+function openBook(id){currentId=id;pageIndex=0;history=[];future=[];$('library').style.display='none';$('editor').style.display='block';$('bookTitle').textContent=active().title;renderPage()}
+function renderPage(){let p=page();$('content').innerHTML=p.html||'';$('content').style.fontSize=(p.fontSize||18)+'px';$('paper').className='paper kind-'+(p.mode||'lined');$('paperMode').value=p.mode||'lined';$('pageLabel').textContent='Página '+(pageIndex+1);$('pageCount').textContent=(pageIndex+1)+' / '+active().pages.length;$('pageList').innerHTML='';active().pages.forEach((pg,i)=>{let btn=document.createElement('button');btn.className='thumb'+(i===pageIndex?' active':'');btn.textContent='▤ Página '+(i+1);btn.onclick=()=>{capture();pageIndex=i;renderPage()};$('pageList').append(btn)})}
+function capture(){if(!page())return;page().html=$('content').innerHTML;page().fontSize=parseInt($('content').style.fontSize)||18;page().mode=$('paperMode').value;active().updated=Date.now()}
+function snapshot(){history.push($('content').innerHTML);if(history.length>40)history.shift();future=[]}
+function insert(html){$('content').focus();snapshot();document.execCommand('insertHTML',false,html);capture()}
+function selectedColor(color){const neon={'#fff19a':'#d9ff00','#c9edcf':'#00f5a0','#f6c9dc':'#ff3bd4','#cdddf8':'#00d9ff'};color=neon[color]||color;$('content').focus();snapshot();document.execCommand('hiliteColor',false,color);if(document.body.dataset.theme==='dark')document.execCommand('foreColor',false,'#111111');capture()}
+document.querySelectorAll('.color-dot').forEach(b=>b.addEventListener('mousedown',e=>e.preventDefault()));
+function showNewBook(){ $('newBookName').value='';$('newBookModal').classList.add('active');$('newBookModal').setAttribute('aria-hidden','false');setTimeout(()=>$('newBookName').focus(),50)}
+function createNewBook(){const title=$('newBookName').value.trim();if(!title){$('newBookName').focus();return}let previous=books.length?(books[books.length-1].coverStyle||''):'';let b={id:'book-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),title,updated:Date.now(),coverImage:makeRandomCover(previous),coverStyle:lastGeneratedCoverStyle,pages:[{mode:'lined',fontSize:18,html:''}]};books.push(b);persist();$('newBookModal').classList.remove('active');$('newBookModal').setAttribute('aria-hidden','true');openBook(b.id)}
+$('newBook').addEventListener('click',showNewBook);$('confirmNewBook').addEventListener('click',createNewBook);$('cancelNewBook').addEventListener('click',()=>{$('newBookModal').classList.remove('active');$('newBookModal').setAttribute('aria-hidden','true')});$('newBookName').addEventListener('keydown',e=>{if(e.key==='Enter')createNewBook();if(e.key==='Escape')$('cancelNewBook').click()});
+$('trashTop').onclick=openTrash;$('closeTrash').onclick=closeTrash;$('trashModal').onclick=e=>{if(e.target===$('trashModal'))closeTrash()};$('newBookModal').onclick=e=>{if(e.target===$('newBookModal'))$('cancelNewBook').click()};
+$('homeBtn').onclick=$('backBtn').onclick=()=>{capture();persist();renderLibrary()};
+$('saveTop').onclick=()=>{capture();persist();let old=$('saveTop').textContent;$('saveTop').textContent='✓ Salvo';setTimeout(()=>$('saveTop').textContent='♡ Salvar',1200)};
+$('addPage').onclick=()=>{capture();active().pages.push({mode:$('paperMode').value,fontSize:page().fontSize||18,html:''});pageIndex=active().pages.length-1;renderPage();snapshot()};
+$('paperMode').onchange=()=>{capture();page().mode=$('paperMode').value;renderPage()};
+$('content').addEventListener('input',()=>{capture()});
+$('content').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();$('saveTop').click()}});
+let savedSelection=null;const selectionTools=$('selectionTools');
+function rememberSelection(){const sel=getSelection();if(sel&&sel.rangeCount&& !sel.isCollapsed && $('content').contains(sel.anchorNode) && $('content').contains(sel.focusNode)){savedSelection=sel.getRangeAt(0).cloneRange();positionSelectionTools();}else if(!selectionTools.matches(':hover'))selectionTools.classList.remove('active')}
+function positionSelectionTools(){if(!savedSelection||savedSelection.collapsed)return;const rect=savedSelection.getBoundingClientRect();if(!rect.width&&!rect.height)return;selectionTools.style.left=Math.max(150,Math.min(innerWidth-150,rect.left+rect.width/2))+'px';selectionTools.style.top=Math.max(58,rect.top-9)+'px';selectionTools.classList.add('active')}
+function restoreSelection(){if(!savedSelection)return false;$('content').focus();const sel=getSelection();sel.removeAllRanges();sel.addRange(savedSelection);return true}
+$('content').addEventListener('mouseup',()=>setTimeout(rememberSelection,0));$('content').addEventListener('keyup',()=>setTimeout(rememberSelection,0));document.addEventListener('selectionchange',()=>{if(document.activeElement===$('content'))rememberSelection()});
+selectionTools.addEventListener('mousedown',e=>e.preventDefault());
+$('selBold').onclick=()=>{if(!restoreSelection())return;snapshot();document.execCommand('bold');capture();rememberSelection()};
+function resizeSelected(delta){if(!restoreSelection())return;snapshot();const sel=getSelection(),range=sel.getRangeAt(0),span=document.createElement('span');span.style.fontSize=(delta<0?'smaller':'larger');try{range.surroundContents(span)}catch(_){span.appendChild(range.extractContents());range.insertNode(span)}capture();savedSelection=document.createRange();savedSelection.selectNodeContents(span);positionSelectionTools()}
+$('selSmaller').onclick=()=>resizeSelected(-1);$('selBigger').onclick=()=>resizeSelected(1);
+document.querySelectorAll('#selectionTools [data-color]').forEach(b=>b.onclick=()=>{if(!restoreSelection())return;selectedColor(b.dataset.color);selectionTools.classList.remove('active');savedSelection=null});
+document.addEventListener('scroll',()=>selectionTools.classList.remove('active'),true);window.addEventListener('resize',()=>selectionTools.classList.remove('active'));
+$('undoBtn').onclick=()=>{if(!history.length)return;future.push($('content').innerHTML);$('content').innerHTML=history.pop();capture()};
+$('redoBtn').onclick=()=>{if(!future.length)return;history.push($('content').innerHTML);$('content').innerHTML=future.pop();capture()};
+let selectedStickerSize=1;
+function renderStickerPalette(){const p=$('stickerPalette');if(!p)return;const types=Object.keys(stickerLabels);p.innerHTML=`<div class="sticker-size-controls"><span>Tamanho:</span><button class="sticker-size-btn active" data-size="1">1</button><button class="sticker-size-btn" data-size="2">2</button><button class="sticker-size-btn" data-size="3">3</button><button class="sticker-palette-close" id="closeStickerPalette">×</button></div><div class="sticker-grid">${types.map(t=>`<button class="sticker-option" type="button" title="${stickerLabels[t]}" data-sticker="${t}"><img alt="${stickerLabels[t]}" src="${stickerData(t)}"></button>`).join('')}</div>`;p.querySelectorAll('[data-size]').forEach(b=>b.onclick=()=>{selectedStickerSize=Number(b.dataset.size);p.querySelectorAll('[data-size]').forEach(x=>x.classList.toggle('active',x===b))});p.querySelectorAll('[data-sticker]').forEach(b=>b.onclick=()=>{let t=b.dataset.sticker;let size={1:68,2:98,3:132}[selectedStickerSize];insert(`<span class="sticker-item" contenteditable="false" draggable="true"><img class="catalog-sticker" style="width:${size}px;height:${size}px;object-fit:contain" alt="${stickerLabels[t]}" src="${stickerData(t)}"><button type="button" class="sticker-remove" title="Remover adesivo">×</button></span>&nbsp;`);persist()});$('closeStickerPalette').onclick=()=>p.classList.remove('active')}
+
+let selectedStickerNode=null;
+$('content').addEventListener('click',e=>{let item=e.target.closest('.sticker-item');document.querySelectorAll('.sticker-item.selected-sticker').forEach(n=>n.classList.remove('selected-sticker'));selectedStickerNode=item||null;if(item)item.classList.add('selected-sticker');if(e.target.classList.contains('sticker-remove')){item.remove();selectedStickerNode=null;capture();persist()}});
+$('content').addEventListener('keydown',e=>{if(selectedStickerNode&&(e.key==='Delete'||e.key==='Backspace')){e.preventDefault();selectedStickerNode.remove();selectedStickerNode=null;capture();persist()}});
+let draggingSticker=null;$('content').addEventListener('dragstart',e=>{let it=e.target.closest('.sticker-item');if(it){draggingSticker=it;e.dataTransfer.setData('text/plain','scrapbook-sticker');e.dataTransfer.effectAllowed='move'}});$('content').addEventListener('dragover',e=>{if(draggingSticker)e.preventDefault()});$('content').addEventListener('drop',e=>{if(!draggingSticker)return;e.preventDefault();let range=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;if(range){range.insertNode(draggingSticker);capture();persist()}draggingSticker=null});
+// As capas são geradas automaticamente; não há controle manual de alteração.
+
+$('stickerBtn').onclick=()=>{renderStickerPalette();$('stickerPalette').classList.toggle('active');$('stampPalette').classList.remove('active')};
+$('stampBtn').onclick=()=>{$('stampPalette').classList.toggle('active');$('stickerPalette').classList.remove('active')};
+document.querySelectorAll('[data-stamp]').forEach(b=>b.onclick=()=>{let v=b.dataset.stamp;if(v==='remove'){document.querySelectorAll('#content .stamp').forEach(x=>x.remove())}else insert(`<span class="stamp">${v}</span>&nbsp;`);$('stampPalette').classList.remove('active');capture();persist()});
+document.addEventListener('click',e=>{if(!e.target.closest('#stickerBtn')&&!e.target.closest('#stickerPalette'))$('stickerPalette')?.classList.remove('active');if(!e.target.closest('#stampBtn')&&!e.target.closest('#stampPalette'))$('stampPalette')?.classList.remove('active')});
+$('photoBtn').onclick=()=>$('photoInput').click();
+$('photoInput').onchange=async e=>{for(let f of e.target.files){if(!f.type.startsWith('image/'))continue;let data=await new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});insert(`<img src="${data}" alt="Fotografia adicionada">`)}e.target.value='';persist()};
+$('renameBook').onclick=()=>{let t=prompt('Novo título:',active().title);if(t?.trim()){active().title=t.trim();$('bookTitle').textContent=t.trim();persist()}};
+$('deleteBook').onclick=()=>{if(active())moveBookToTrash(currentId)};
+$('pdfBtn').onclick=()=>{capture();persist();window.print()};
+$('backupBtn').onclick=()=>{capture();persist();let blob=new Blob([JSON.stringify(books,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='scrapbook-backup.json';a.click();URL.revokeObjectURL(a.href)};
+window.addEventListener('beforeunload',()=>{if(currentId){capture();persist()}});
+
+// Tema simples claro/escuro, preservado localmente.
+function applyTheme(){const t=localStorage.getItem('scrapbook_pop_theme')||'light';document.body.dataset.theme=t==='dark'?'dark':'light';$('themeToggle').textContent=t==='dark'?'☾':'✿';$('themeToggle').title=t==='dark'?'Ativar tema claro':'Ativar tema escuro'}
+$('themeToggle').onclick=()=>{localStorage.setItem('scrapbook_pop_theme',(document.body.dataset.theme==='dark')?'light':'dark');applyTheme()};applyTheme();
+// Calendário com eventos locais, edição, exclusão e cores.
+let calendarViewDate=new Date(),calendarSelectedDate=new Date(),editingEventId=null,selectedEventColor='#e7a3ad';const calendarMonthNames=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'],eventColors=['#e7a3ad','#e9bd79','#9dbb9a','#9bb9d5','#b7a0d2','#d69a75'],eventsKey='meu_scrapbook_events';const dateKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;const readEvents=()=>{try{return JSON.parse(localStorage.getItem(eventsKey)||'[]')}catch{return []}};let lastCalendarDayTap=null;
+const reminderKey='scrapbook_event_reminders_shown_v1';
+function tomorrowKey(){const d=new Date();d.setDate(d.getDate()+1);return dateKey(d)}
+function checkTomorrowReminders(){if(!('Notification' in window)||Notification.permission!=='granted')return;const key=tomorrowKey(),tomorrowEvents=readEvents().filter(e=>e.date===key);if(!tomorrowEvents.length)return;let shown={};try{shown=JSON.parse(localStorage.getItem(reminderKey)||'{}')}catch{};tomorrowEvents.forEach(ev=>{const token=key+'|'+ev.id;if(shown[token])return;try{new Notification('Lembrete do Scrapbook',{body:`Amanhã: ${ev.title}${ev.time?' às '+ev.time:''}.`});shown[token]=Date.now()}catch(err){console.warn('Não foi possível exibir a notificação:',err)}});localStorage.setItem(reminderKey,JSON.stringify(shown))}
+async function requestReminderPermission(){if(!('Notification' in window))return;if(Notification.permission==='default'){try{await Notification.requestPermission()}catch{}}checkTomorrowReminders()}
+
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderCalendar(){const title=$('calendarMonthTitle'),grid=$('calendarGrid');if(!title||!grid)return;let y=calendarViewDate.getFullYear(),m=calendarViewDate.getMonth();title.textContent=calendarMonthNames[m][0].toUpperCase()+calendarMonthNames[m].slice(1)+' de '+y;grid.innerHTML=['D','S','T','Q','Q','S','S'].map(d=>`<span class="calendar-weekday">${d}</span>`).join('');let first=new Date(y,m,1).getDay(),count=new Date(y,m+1,0).getDate(),today=dateKey(new Date()),selected=dateKey(calendarSelectedDate),events=readEvents();for(let i=0;i<first;i++)grid.insertAdjacentHTML('beforeend','<span class="calendar-day empty"></span>');for(let day=1;day<=count;day++){let key=dateKey(new Date(y,m,day)),ev=events.filter(e=>e.date===key),cl=['calendar-day',key===today?'today':'',key===selected?'selected':''].filter(Boolean).join(' '),dot=ev.length?`<i class="calendar-event-dot" style="--dot-color:${ev[0].color||eventColors[0]}"></i>`:'';grid.insertAdjacentHTML('beforeend',`<button type="button" class="${cl}" data-day="${day}">${day}${dot}</button>`)}grid.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{let d=new Date(y,m,+b.dataset.day),key=dateKey(d),second=lastCalendarDayTap===key;calendarSelectedDate=d;lastCalendarDayTap=second?null:key;renderCalendar();if(second)openEventModal(key)});$('calendarSelectedDate').textContent=`Selecionado: ${calendarSelectedDate.getDate()} de ${calendarMonthNames[calendarSelectedDate.getMonth()]} de ${calendarSelectedDate.getFullYear()}`;renderCalendarEvents()}
+function renderCalendarEvents(){let box=$('calendarEventsList');if(!box)return;let key=dateKey(calendarSelectedDate),events=readEvents().filter(e=>e.date===key).sort((a,b)=>(a.time||'').localeCompare(b.time||''));box.innerHTML=events.length?events.map(e=>`<button class="calendar-event-item" data-event="${esc(e.id)}"><i style="--dot-color:${e.color||eventColors[0]}"></i><span>${esc(e.title)}</span><small>${esc(e.time||'Dia todo')}</small></button>`).join(''):'<p class="calendar-empty">Nenhum evento nesta data. Toque duas vezes na data para adicionar.</p>';box.querySelectorAll('[data-event]').forEach(b=>b.onclick=()=>openEventModal(key,b.dataset.event))}
+function openEventModal(date=dateKey(calendarSelectedDate),id=null){editingEventId=id;let ev=id?readEvents().find(e=>String(e.id)===String(id)):null;$('eventModalTitle').textContent=ev?'Editar acontecimento':'Um dia especial';$('eventTitleInput').value=ev?.title||'';$('eventDateInput').value=ev?.date||date;$('eventTimeInput').value=ev?.time||'';selectedEventColor=ev?.color||eventColors[0];$('eventDeleteBtn').style.display=ev?'inline-block':'none';document.querySelectorAll('#eventColorOptions button').forEach(b=>b.classList.toggle('selected',b.dataset.color===selectedEventColor));$('eventModal').classList.add('active');$('eventModal').setAttribute('aria-hidden','false')}
+function closeEventModal(){$('eventModal').classList.remove('active');$('eventModal').setAttribute('aria-hidden','true')}
+$('eventSaveBtn').onclick=()=>{let title=$('eventTitleInput').value.trim(),date=$('eventDateInput').value,time=$('eventTimeInput').value;if(!title||!date){alert('Informe o nome e a data do acontecimento.');return}let ev=readEvents();if(editingEventId){let i=ev.findIndex(e=>String(e.id)===String(editingEventId));if(i>=0)ev[i]={...ev[i],title,date,time,color:selectedEventColor}}else ev.push({id:String(Date.now())+Math.random().toString(16).slice(2),title,date,time,color:selectedEventColor});localStorage.setItem(eventsKey,JSON.stringify(ev));let [y,m,d]=date.split('-').map(Number);calendarSelectedDate=new Date(y,m-1,d);calendarViewDate=new Date(y,m-1,1);closeEventModal();renderCalendar();requestReminderPermission()};
+$('eventDeleteBtn').onclick=()=>{if(!editingEventId||!confirm('Excluir este acontecimento?'))return;localStorage.setItem(eventsKey,JSON.stringify(readEvents().filter(e=>String(e.id)!==String(editingEventId))));closeEventModal();renderCalendar()};$('eventCancelBtn').onclick=closeEventModal;$('eventModal').onclick=e=>{if(e.target===$('eventModal'))closeEventModal()};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEventModal()});$('eventColorOptions').onclick=e=>{let b=e.target.closest('[data-color]');if(!b)return;selectedEventColor=b.dataset.color;document.querySelectorAll('#eventColorOptions button').forEach(x=>x.classList.toggle('selected',x===b))};$('calendarPrev').onclick=()=>{lastCalendarDayTap=null;calendarViewDate=new Date(calendarViewDate.getFullYear(),calendarViewDate.getMonth()-1,1);renderCalendar()};$('calendarNext').onclick=()=>{lastCalendarDayTap=null;calendarViewDate=new Date(calendarViewDate.getFullYear(),calendarViewDate.getMonth()+1,1);renderCalendar()};renderCalendar();
+
+load();checkTomorrowReminders();setInterval(checkTomorrowReminders,60000);window.addEventListener('focus',checkTomorrowReminders);document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeTrash();$('newBookModal').classList.remove('active');$('newBookModal').setAttribute('aria-hidden','true')}});
+})();
+</script>
+</body></html>
